@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Welcome</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static',filename='css/footer.css') }}" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-dark " style="background-color: #039be5">
+      <a class="navbar-brand" href="#">PRUDENT</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container-fluid pb-2">
+      <div class="jumbotron card card-image"
+        style="background-image: url({{ url_for('static',filename='img/gradient1.jpg') }});">
+        <div class="text-white text-center px-5">
+          <div>
+            <h1 class="card-title h1-responsive pt-3 mb-5 font-bold"><strong>Welcome</strong></h1>
+            <p class="mx-5">
+              <span style="color: red">INSTRUCTIONS</span>
+              <div class="row container-fluid">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                  <ol type="1">
+                    <li>Allow Notifications for this page.</li>
+                    <li>All Questions are mandatory.</li>
+                    <li>Provide Genuine Details.</li>
+                  </ol>
+                </div>
+                <div class="col-md-4"></div>
+              </div>
+            </p>
+            <h3 id="session">{{ session }}</h3>
+            <button id = "start" class="btn btn-primary" onclick="main()" >Start</button>
+          </div>
+        </div>
+      </div>
+      <!-- MODAL 1-->
+      <div class="modal" id="myModal1"> 
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Question 1</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              Is the venue easily accessible?
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample11" name="groupOfDefaultRadios1"
+                  value="YES">
+                <label class="custom-control-label" for="defaultGroupExample11">YES</label>
+              </div>
+
+              <!-- Group of default radios - option 2 -->
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample10" name="groupOfDefaultRadios1"
+                  value="NO">
+                <label class="custom-control-label" for="defaultGroupExample10">NO</label>
+              </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button id="close1" type="button" class="btn btn-danger" >Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 2-->
+      <div class="modal" id="myModal2">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Question 2</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              Is the Session Interactive?
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample21" name="groupOfDefaultRadios2"
+                  value="YES">
+                <label class="custom-control-label" for="defaultGroupExample21">YES</label>
+              </div>
+
+              <!-- Group of default radios - NO -->
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample20" name="groupOfDefaultRadios2"
+                  value="NO">
+                <label class="custom-control-label" for="defaultGroupExample20">NO</label>
+              </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button id="close2" type="button" class="btn btn-danger">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 3-->
+      <div class="modal" id="myModal3">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Question 3</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+             Does the Instructor demonstrate adequate knowledge of topic?
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample31" name="groupOfDefaultRadios3"
+                  value="YES">
+                <label class="custom-control-label" for="defaultGroupExample31">YES</label>
+              </div>
+
+              <!-- Group of default radios - NO -->
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample30" name="groupOfDefaultRadios3"
+                  value="NO">
+                <label class="custom-control-label" for="defaultGroupExample30">NO</label>
+              </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button id="close3" type="button" class="btn btn-danger" >Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- MODAL 4-->
+      <div class="modal" id="myModal4">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Question 4</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              Was the Seminar relevant to the topic?
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample41" name="groupOfDefaultRadios4"
+                  value="YES">
+                <label class="custom-control-label" for="defaultGroupExample41">YES</label>
+              </div>
+
+              <!-- Group of default radios - NO -->
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample40" name="groupOfDefaultRadios4"
+                  value="NO">
+                <label class="custom-control-label" for="defaultGroupExample40">NO</label>
+              </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button id="close4" type="button" class="btn btn-danger" >Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- MODAL 5-->
+      <div class="modal" id="myModal5">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Question 5</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              Are you likely to participate in our future seminar sessions?
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample51" name="groupOfDefaultRadios5"
+                  value="YES">
+                <label class="custom-control-label" for="defaultGroupExample51">YES</label>
+              </div>
+
+              <!-- Group of default radios - NO -->
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="defaultGroupExample50" name="groupOfDefaultRadios5"
+                  value="NO">
+                <label class="custom-control-label" for="defaultGroupExample50">NO</label>
+              </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button id="close5" type="button" class="btn btn-danger" >Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <!-- Copyright -->
+    <div class="text-center">© 2019 Copyright:
+      <a href="https://mdbootstrap.com/education/bootstrap/"> Prudent Grooming</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+
+  <!-- <script type="text/javascript" src="{{ url_for('static',filename='js/push.min.js') }}"></script> -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/push.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/notification.js') }}"></script>
+  <!-- <script type="text/javascript" src="static/js/notification.js"></script> -->
+
+</body>
+
+</html>

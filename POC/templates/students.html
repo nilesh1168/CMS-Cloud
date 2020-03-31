@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block title %} {{ title }} {% endblock %}
+</head>
+<body>
+    {% block page_content %}
+    <div class="container-fluid">
+        <h3 class="text-center text-dark my-4">Atendees</h3>
+        <table class="table table-hover">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Mobile</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>City</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for stud in students %}
+                    <tr>
+                        <td scope="row">{{ stud.mobile }}</td>
+                        <td>{{ stud.name }}</td>
+                        <td>{{ stud.email }}</td>
+                        <td>{{ stud.address }}</td>
+                        <td>{{ stud.city }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+    </div>
+    <hr>
+    <div class="container-fluid">
+        {% if prev %}
+        <a href="{{ prev }}">Newer</a>
+        {% endif %}
+        {% if next %}
+        <a href="{{ next }}">Older</a>
+        {% endif %}
+    </div>   
+    <hr>     
+    {% endblock %}
+</body>
+</html>

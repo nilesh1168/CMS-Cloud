@@ -1,0 +1,14 @@
+Changelog v1.0 14/02/2020
+
+GET /feedback -> displays welcome.html
+when all questions are answered 
+GET /feedback_form?data=<answer>&session=<session>
+
+    Data Required for backend:
+    Stud_Info -> FeedbackForm     => POST request
+    Response -> <answer> , <session>id , student mobile
+    Session_Stud -> <session>id , student mobile
+    Feedback -> aoi, <session>id , student mobile
+
+""" completed basic database entries"""
+

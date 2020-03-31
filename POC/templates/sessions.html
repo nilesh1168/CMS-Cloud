@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block title %} {{ title }} {% endblock %}
+</head>
+<body>
+    {% block page_content %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/fontawesome.js') }}"></script>
+    <div class="container-fluid">
+        <h3 class="text-center text-dark my-4">Sessions</h3>
+        <table class="table table-hover">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Domain</th>
+                    <th>Scheduled On</th>
+                    <th>Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                    <tr id = "{{ session.s_id }}">
+                        <td scope="row">{{ session.s_id }}</td>
+                        <td>{{ session.name }}</td>
+                        <td>{{ session.domain }}</td>
+                        <td>{{ session.scheduled_on }}</td>
+                        <td>{{ session.time }}</td>
+                        <td><a onclick="del({{ session.s_id }})"><i style="cursor:pointer" class="fas fa-trash-alt"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                    
+                </tbody>
+        </table>
+    </div>
+    <script>
+        function del(id){
+            $.ajax({
+                type: "post",
+                url: "/delsession/"+id,
+                success: function (response) {
+                    $('#'+id).hide();
+                    console.log(response);
+                    
+                }
+            });
+        }
+    </script>  
+    {% endblock %}
+</body>
+</html>
