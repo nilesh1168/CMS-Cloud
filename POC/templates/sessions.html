@@ -20,7 +20,6 @@
                     <th>Name</th>
                     <th>Domain</th>
                     <th>Scheduled On</th>
-                    <th>Time</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,7 +29,6 @@
                         <td>{{ session.name }}</td>
                         <td>{{ session.domain }}</td>
                         <td>{{ session.scheduled_on }}</td>
-                        <td>{{ session.time }}</td>
                         <td><a onclick="del({{ session.s_id }})"><i style="cursor:pointer" class="fas fa-trash-alt"></i></a></td>
                     </tr>
                     {% endfor %}

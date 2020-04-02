@@ -1,4 +1,4 @@
-class Testfeedback:
+class feedbackEntity:
     answer = None
     session = None
     def __init__(self,answer,session):

@@ -45,8 +45,7 @@ class Session(db.Model):
     s_id = db.Column(db.Integer(),primary_key=True)
     name = db.Column(db.String(30))
     domain = db.Column(db.String(20))
-    scheduled_on = db.Column(db.Date(),nullable=False)
-    time = db.Column(db.Time(),nullable=False)
+    scheduled_on = db.Column(db.DateTime(),nullable=False)
 
     def __repr__(self):
         return 'Domain : {}'.format(self.domain)

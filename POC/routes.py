@@ -5,7 +5,7 @@ from POC import app,db
 from POC.models import Admin, Session, StudInfo, Response, Feedback
 from werkzeug.urls import url_parse
 import datetime
-from POC.feedback import Testfeedback
+from POC.entity import feedbackEntity
 
 
 @app.route("/",methods = ['GET','POST'])
@@ -25,6 +25,7 @@ def register():
         # mail.send(msg)
         # message = client.messages.create(to="+91"+form.mobile.data ,from_="+12509002936",body="Thank You for registering with Daily Task Lister!")
         db.session.add(admin)
+        
         db.session.commit()
         flash("Registered Successfully!!")
         return redirect(url_for('login'))        
@@ -60,20 +61,22 @@ def schedule():
     """To arrange sessions"""
     form = ArrangeSessionForm()
     if request.method == 'POST':
-        print(form.session_date.data)
-        session = Session(name = form.session_name.data ,domain = form.session_domain.data ,scheduled_on= form.session_date.data, time= form.session_time.data)
-        db.session.add(session)
-        db.session.commit()
-        flash("Session created Successfully!!")
+        if form.validate_on_submit():
+            print(form.session_domain.data)
+            print(type(form.session_date.data))
+            session = Session(name = form.session_name.data ,domain = form.session_domain.data ,scheduled_on= form.session_date.data)
+            db.session.add(session)
+            db.session.commit()
+            flash("Session created Successfully!!")
     return render_template("createsession.html", title = "Schedule", form = form)
 
 @app.route("/feedback",methods = ['GET'])
 def start_session():
     l=[]
-    t = Session.query.filter_by(scheduled_on=datetime.date.today()).order_by(Session.time).all()
+    t = db.session.query(Session).filter(Session.scheduled_on < datetime.datetime.now()).all()
     for obj in t:
-        dateTimeA = datetime.datetime.combine(datetime.date.today(), datetime.datetime.now().time())
-        dateTimeB = datetime.datetime.combine(datetime.date.today(), obj.time)
+        dateTimeA = datetime.datetime.now()
+        dateTimeB = obj.scheduled_on
         dateTimeDifference = dateTimeA - dateTimeB
         dateTimeDifferenceInHours = dateTimeDifference.total_seconds() / 3600
         print("dateTimeDifferenceInHours",dateTimeDifferenceInHours,obj.name)
@@ -93,28 +96,30 @@ def feedback_form():
     session = Session.query.filter_by(domain=s_domain).first()
     print(type(session))
     print(session.s_id)
-    Testfeedback.answer = answer
-    Testfeedback.session = session
+    feedbackEntity.answer = answer
+    feedbackEntity.session = session
     return render_template("feedbackform.html",form=form)
 
-@app.route("/testurl",methods=['GET','POST'])
-def testurl():
-    form = FeedbackForm()
+@app.route("/getFeedback",methods=['GET','POST'])
+def getFeedback():
+    form = FeedbackForm(request.form)
     now = datetime.datetime.now().time()
-    if request.method == 'POST':
+    print(form.validate_on_submit())
+    if form.validate_on_submit():
         stud = StudInfo(mobile = form.contact.data,name = form.name.data,email = form.email.data,address = form.address.data,city = form.city.data)
         """Add response"""
-        res = Response(answer = Testfeedback.answer,session = Testfeedback.session.s_id,stud_mobile = form.contact.data)
+        res = Response(answer = feedbackEntity.answer,session = feedbackEntity.session.s_id,stud_mobile = form.contact.data)
         """Add Association"""
-        stud.session.append(Testfeedback.session)
+        stud.session.append(feedbackEntity.session)
         db.session.add(stud)
         db.session.add(res)
         db.session.commit()
         """Add Feedback"""
-        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = Testfeedback.session.s_id,mobile = stud.mobile)
+        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile)
         db.session.add(feedback)
         db.session.commit()
-    return render_template('test.html')
+        return render_template('test.html')
+    return render_template("feedbackform.html",form=form)    
 
 @app.route("/show",methods=['GET','POST'])
 def getStudents():
@@ -122,6 +127,7 @@ def getStudents():
     page = request.args.get('page', 1,type = int)
     students = StudInfo.query.paginate(page,app.config['ENTRIES_PER_PAGE'],False)
     
+
     next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
     prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
     return render_template("students.html",students = students.items,next=next_url,prev=prev_url)
