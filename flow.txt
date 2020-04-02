@@ -13,6 +13,6 @@ GET /feedback_form?data=<answer>&session=<session>
 """ completed basic database entries"""
 
 CREATE EVENT myevent
-    ON SCHEDULE AT create_date + INTERVAL 5 MINUTES
+    ON SCHEDULE AT 2020-04-02 14:00:00 + INTERVAL 5 MINUTES
     DO
-      DELETE from test1 where time < ;
+      DELETE from test1 where test1.time = ;

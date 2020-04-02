@@ -1,8 +1,8 @@
-"""init migrations
+"""removed and changed Session
 
-Revision ID: 953cf3888fc3
+Revision ID: 0d30a496ac8f
 Revises: 
-Create Date: 2020-02-11 01:02:02.651687
+Create Date: 2020-04-02 19:43:26.311514
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '953cf3888fc3'
+revision = '0d30a496ac8f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,8 +35,7 @@ def upgrade():
     sa.Column('s_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=30), nullable=True),
     sa.Column('domain', sa.String(length=20), nullable=True),
-    sa.Column('scheduled_on', sa.Date(), nullable=False),
-    sa.Column('time', sa.Time(), nullable=False),
+    sa.Column('scheduled_on', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('s_id')
     )
     op.create_table('Student_Info',
