@@ -9,82 +9,83 @@
 </head>
 <body>
     {% block page_content %}
-    <div class="container">
-      <div class="card-deck">
-      <div class="card bg-primary">    
-        <div class="card-body text-center">
-          Java (45)
-        </div>
-      </div>
-      <div class="card bg-primary">
-         
-          <div class="card-body text-center">
-              Python (50)
-          </div>
-        </div>
-        <div class="card bg-primary">
-          <div class="card-body text-center">
-              C++ (30)
-          </div>
-        </div>
-        <div class="card bg-primary">
-          <div class="card-body text-center">
-              .Net (20)
-          </div>
-        </div>
-    </div>
-  <div class="container p-3 my-3">
-      <div class="table-responsive">
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>#</th>
+    <div class="container-fluid">
+      <h3 class="text-center text-dark my-4">Sessions</h3>
+      <table class="table table-hover">
+        <thead class="thead-inverse">
+            <tr>
+                <th>ID</th>
                 <th>Name</th>
-                <th>Address</th>
-                <th>Email</th>
-                <th>Mob no.</th>
-                <th>Area of interest</th>
-              </tr>
+                <th>Domain</th>
+                <th>Scheduled On</th>
+            </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>Anuja Pawar</td>
-                <td>Karad</td>
-                <td>anujapawar64@gmail.com</td>
-                <td>8669531805</td>
-                <td>Java</td>
+              {% if sessions %}
+              {% for session in sessions %}
+              <tr id = "{{ session.s_id }}">
+                  <td scope="row">{{ session.s_id }}</td>
+                  <td>{{ session.name }}</td>
+                  <td>{{ session.domain }}</td>
+                  <td>{{ session.scheduled_on }}</td>
               </tr>
-              <tr>
-                  <td>2</td>
-                  <td>Parthavi Patel</td>
-                  <td>Amravati</td>
-                  <td>parthavipatel98@gmail.com</td>
-                  <td>8669531805</td>
-                  <td>C++</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Nilesh Suryawanshi</td>
-                  <td>Pune</td>
-                  <td>nileshsuryawanshi2016.comp@mmcoe.edu.in</td>
-                  <td>8669531805</td>
-                  <td>Python</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Sayee Mulay</td>
-                  <td>Ahamadnagar</td>
-                  <td>mulaysayee2016.comp@mmcoe.edu.in</td>
-                  <td>8669531805</td>
-                  <td>.Net</td>
-                </tr>
+              {% endfor %}
+              {% else %}
+                  <tr><h4>No sessions Scheduled!!</h4></tr>
+              {% endif %} 
             </tbody>
-          </table>
-        </div>
-      </div>
-      </div>
+    </table>
   </div>
+  <div class="container-fluid" >
+    <div id = "pie-chart">
+
+    </div>
+    <hr>
+    <div id="bar-chart">
+
+    </div>
+
+  </div>
+  
+  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
+    <script type="text/javascript">
+
+      // Load Charts and the corechart and barchart packages.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Draw the pie chart and bar chart when Charts is loaded.
+      
+      $.ajax({
+        type: "get",
+        url: "/getAOI",
+        success: function (response) {
+          console.log(response)
+
+          google.charts.setOnLoadCallback(drawChart);
+          arr = [['Area of Interest','Count']]
+          for (let index = 0; index < response['AOI'].length; index++) {
+            arr.push(response['AOI'][index])
+          }
+          function drawChart() {
+        var d = google.visualization.arrayToDataTable(arr);
+
+        var piechart_options = {title:'Pie Chart: Task done in a day',
+                       width:800,
+                       height:400};
+        var piechart = new google.visualization.PieChart(document.getElementById('pie-chart'));
+        piechart.draw(d, piechart_options);
+
+  //       var barchart_options = {title:'Barchart: Task done in a day',
+  //                      width:400,
+  //                      height:300,
+  //                      legend: 'none'};
+  //       var barchart = new google.visualization.BarChart(document.getElementById('bar-chart'));
+  //       barchart.draw(data, barchart_options);
+      }
+        }
+      });
+      
+</script>
     {% endblock %}
 </body>
 </html>

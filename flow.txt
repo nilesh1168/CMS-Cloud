@@ -15,4 +15,4 @@ GET /feedback_form?data=<answer>&session=<session>
 CREATE EVENT myevent
     ON SCHEDULE AT 2020-04-02 14:00:00 + INTERVAL 5 MINUTES
     DO
-      DELETE from test1 where test1.time = ;
+      DELETE from test1 where test1.time = test1.time ;

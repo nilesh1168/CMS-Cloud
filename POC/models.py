@@ -59,6 +59,7 @@ class Feedback(db.Model):
     description = db.Column(db.String(200),nullable = False)
     session = db.Column(db.Integer(),db.ForeignKey('Session.s_id'))
     mobile = db.Column(db.BigInteger(),db.ForeignKey('Student_Info.mobile'))
+    sentiment = db.Column(db.String(10),nullable = False)
 
     def __repr__(self):
         return 'Description : {}'.format(self.description)

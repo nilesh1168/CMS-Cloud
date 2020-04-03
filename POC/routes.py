@@ -11,7 +11,8 @@ from POC.entity import feedbackEntity
 @app.route("/",methods = ['GET','POST'])
 @login_required
 def home():
-    return render_template("dashboard.html",title='Dashboard')    
+    sessions = db.session.query(Session).filter(Session.scheduled_on > datetime.datetime.now()).all()
+    return render_template("dashboard.html",title='Dashboard',sessions = sessions)    
 
 @app.route("/register", methods = ['GET','POST'])
 def register():
@@ -114,8 +115,10 @@ def getFeedback():
         db.session.add(stud)
         db.session.add(res)
         db.session.commit()
-        """Add Feedback"""
-        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile)
+        """Add Feedback
+            API call for sentiment  
+        """
+        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, )
         db.session.add(feedback)
         db.session.commit()
         return render_template('test.html')
@@ -149,6 +152,12 @@ def del_Session(s_id):
     l = get_flashed_messages()
     return l[0]
     
+@app.route("/getAOI",methods=['GET'])
+def getAOI():
+    data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
+    data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
+    d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
+    return d
 
 @app.route("/showanswers",methods=['GET','POST'])
 def showAnswers():
