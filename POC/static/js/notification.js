@@ -1,5 +1,6 @@
 var answers = [];
 var cnt=0;
+console.log(document.getElementById("session").textContent)
 const registerServiceWorker = async () => {
   swRegistration =  await navigator.serviceWorker.register('service-worker.js');
   return swRegistration;

@@ -6,7 +6,9 @@ from POC.models import Admin, Session, StudInfo, Response, Feedback
 from werkzeug.urls import url_parse
 import datetime
 from POC.entity import feedbackEntity
+import boto3
 
+comprehend = client = boto3.client('comprehend')
 
 @app.route("/",methods = ['GET','POST'])
 @login_required
@@ -84,6 +86,7 @@ def start_session():
         if dateTimeDifferenceInHours > 0:
             l.append(dateTimeDifferenceInHours)
     a = min(l)
+    print("inside /feedback",t[l.index(a)].domain)
     return render_template("welcome.html",session = t[l.index(a)].domain)
 
 @app.route("/feedback_form",methods=['GET'])
@@ -118,7 +121,8 @@ def getFeedback():
         """Add Feedback
             API call for sentiment  
         """
-        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, )
+        sentiment = comprehend.detect_sentiment(Text=form.feedback.data, LanguageCode='en')
+        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
         db.session.commit()
         return render_template('test.html')
@@ -152,7 +156,7 @@ def del_Session(s_id):
     l = get_flashed_messages()
     return l[0]
     
-@app.route("/getAOI",methods=['GET'])
+@app.route("/getdata",methods=['GET'])
 def getAOI():
     data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
     data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
