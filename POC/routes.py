@@ -71,6 +71,7 @@ def schedule():
             db.session.add(session)
             db.session.commit()
             flash("Session created Successfully!!")
+            return redirect(url_for('schedule'))
     return render_template("createsession.html", title = "Schedule", form = form)
 
 @app.route("/feedback",methods = ['GET'])
@@ -132,9 +133,10 @@ def getFeedback():
 def getStudents():
     """To view all the Student attendees"""
     page = request.args.get('page', 1,type = int)
-    students = StudInfo.query.paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    
 
+    query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
+    
     next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
     prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
     return render_template("students.html",students = students.items,next=next_url,prev=prev_url)
