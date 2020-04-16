@@ -10,7 +10,8 @@
 <body>
     {% block page_content %}
     <div class="container-fluid">
-      <h3 class="text-center text-dark my-4">Sessions</h3>
+      <h3 class="text-center text-dark my-4">Upcoming Sessions</h3>
+      {% if sessions %}
       <table class="table table-hover">
         <thead class="thead-inverse">
             <tr>
@@ -19,28 +20,34 @@
                 <th>Domain</th>
                 <th>Scheduled On</th>
             </tr>
-            </thead>
+        </thead>
             <tbody>
-              {% if sessions %}
+              
               {% for session in sessions %}
-              <tr id = "{{ session.s_id }}">
-                  <td scope="row">{{ session.s_id }}</td>
-                  <td>{{ session.name }}</td>
-                  <td>{{ session.domain }}</td>
-                  <td>{{ session.scheduled_on }}</td>
+              <tr>
+                <td>{{ session.s_id }}</td>
+                <td>{{ session.name }}</td>
+                <td>{{ session.domain }}</td>
+                <td>{{ session.scheduled_on }}</td>
               </tr>
-              {% endfor %}
-              {% else %}
-                  <tr colspan = "4"><h4>No sessions Scheduled!!</h4></tr>
+            {% endfor %}
             </tbody>
     </table>
-    {% endif %} 
+    {% else %}
+      <div class="container"><p class="text-center">No Sessions!!</p></div>
+    {% endif %}
   </div>
-  <div class="container-fluid" >
-    <div id = "pie-chart" class="align-content-center">
+  <div class="container-fluid mt-4" >
+    <div class="row align-items-center">
+      <div class="col-md-1"></div>
+      <div class="col-md-10" id = "pie-chart"></div>
+      <div class="col-md-1"></div>
     </div>
     <hr>
-    <div id="bar-chart" class="align-content-center">
+    <div class="row align-items-center">
+      <div class="col-md-1"></div>
+      <div class="col-md-10"  id="bar-chart"></div>
+      <div class="col-md-1"></div>  
     </div>
   </div>
     {% endblock %}

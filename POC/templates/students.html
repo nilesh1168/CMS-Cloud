@@ -15,21 +15,21 @@
         <table class="table table-hover">
             <thead class="thead-inverse">
                 <tr>
-                    <th>Mobile</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Address</th>
                     <th>City</th>
+                    <th>Feedback</th>
+                    <th>Session</th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for stud in students %}
                     <tr>
-                        <td scope="row">{{ stud.mobile }}</td>
-                        <td>{{ stud.name }}</td>
+                        <td scope="row">{{ stud[0] }}</td>
                         <td>{{ stud.email }}</td>
-                        <td>{{ stud.address }}</td>
                         <td>{{ stud.city }}</td>
+                        <td>{{ stud.description }}</td>
+                        <td>{{ stud.name }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
