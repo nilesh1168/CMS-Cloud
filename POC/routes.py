@@ -180,4 +180,7 @@ def showAnswers():
 @app.route("/service-worker.js",methods = ['GET','POST'])
 def load_service():
     return send_from_directory(app.config['SERVICE_WORKER_PATH'],'service-worker.js')
-  
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return 'This route does not exist {}'.format(request.url), 404
