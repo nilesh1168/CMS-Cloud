@@ -12,6 +12,9 @@
     {% block page_content %}
     <div class="container-fluid">
         <h3 class="text-center text-dark my-4">Atendees</h3>
+        
+        <p class="text-right"> <input id="myInput" type="text" placeholder="Search.."> </p> 
+
         <table class="table table-hover">
             <thead class="thead-inverse">
                 <tr>
@@ -22,8 +25,8 @@
                     <th>Session</th>
                 </tr>
                 </thead>
-                <tbody>
-                    {% for stud in students %}
+                <tbody id="myTable">
+                    {% for stud in students.items %}
                     <tr>
                         <td scope="row">{{ stud[0] }}</td>
                         <td>{{ stud.email }}</td>
@@ -36,15 +39,33 @@
         </table>
     </div>
     <hr>
-    <div class="container-fluid">
-        {% if prev %}
-        <a href="{{ prev }}">Newer</a>
-        {% endif %}
-        {% if next %}
-        <a href="{{ next }}">Older</a>
-        {% endif %}
+    <div class="container-fluid text-center">
+
+            {% if prev %}
+            <a href="{{ prev }}">Newer</a>
+            {% endif %}
+            {% for page in range(1,pages+1) %}
+                {% if cur_page == page %}
+                    <u><a href = "{{ url_for('getStudents',page = page ) }}" >{{ page }}</a></u>
+                {% else %}
+                    <a href= "{{ url_for('getStudents',page = page ) }}" >{{ page }}</a>
+                {% endif %}
+            {% endfor %}    
+        
+            {% if next %}
+            <a href="{{ next }}">Older</a>
+            {% endif %}
+
     </div>   
-    <hr>     
+    <hr>   
+    <script>
+               $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+    </script>  
     {% endblock %}
 </body>
 </html>

@@ -136,10 +136,12 @@ def getStudents():
 
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
     students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    
+    pages = students.pages
+    cur_page = students.page
     next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
     prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return render_template("students.html",students = students.items,next=next_url,prev=prev_url)
+    return render_template("students.html",students = students,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+
 
 
 @app.route("/sessions",methods=['GET','POST'])

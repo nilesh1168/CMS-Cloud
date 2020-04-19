@@ -1,5 +1,17 @@
-self.addEventListener('install', event => {event.waitUntil(self.skipWaiting())});
-
+self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open('myappcache').then(function(cache) {
+      return cache.addAll(
+        [
+          'static/css/bootstrap.css',
+          'static/css/style.css',
+          'static/js/bootstrap.min.js',
+          'static/js/jquery-3.4.1.min.js',
+        ]
+      );
+    })
+  );
+});
 
 self.addEventListener('activate', event => {
 event.waitUntil(self.clients.claim())

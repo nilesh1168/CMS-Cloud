@@ -21,8 +21,8 @@
         var aoi = google.visualization.arrayToDataTable(arr_aoi);
 
         var aoichart_options = {title:'Percentage of Area of Interest',
-                       width:800,
-                       height:400,
+                       width:500,
+                       height:300,
       colors: ['#08B6FF', '#22A3DA', '#2F8AB1', '#3E8BAB', '#5F8A9D']
                       };
                        
@@ -32,9 +32,9 @@
         var sent =  google.visualization.arrayToDataTable(arr_sent);
 
          var sentchart_options = {title:'Feedback Analysis',
-                       width:800,
-                       height:400,
-                       colors: ['red', 'green']
+                       width:500,
+                       height:300,
+                       colors: ['red','#ADAD85' , 'green']
                                  };
         var sentchart = new google.visualization.PieChart(document.getElementById('bar-chart'));
         sentchart.draw(sent, sentchart_options);

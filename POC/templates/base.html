@@ -16,13 +16,15 @@
    
     <!-- Scrollbar Custom CSS -->
   <link href="{{ url_for('static',filename='css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>   
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
 </head>
 <body>
     
     <div class="wrapper">
         <!-- Sidebar -->
-        <nav id="sidebar">
+        <nav id="sidebar" class=>
           <div class="sidebar-header">
               <h3>Prudent Grooming</h3>
           </div>
@@ -116,11 +118,8 @@
         </div>
     
     </div> 
-
+    <script type="text/javascript" src="{{ url_for('static',filename='js/notification.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>   
-    <!-- Bootstrap tooltips -->
-    <script type="text/javascript" src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
     <!-- Scrollable JS -->
@@ -128,19 +127,25 @@
     <script type="text/javascript" src="{{ url_for('static',filename='js/solid.js') }}"></script>
     <!-- Font Awesome JS -->
     <script type="text/javascript" src="{{ url_for('static',filename='js/fontawesome.js') }}"></script>
-    <script type= "text/javascript" src = "{{ url_for('static',filename='js/getdata.js') }}" ></script>
+    
     <!-- <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap-datetimepicker.min.js') }}"></script> -->
     <script>
         $(document).ready(function () {
+            registerServiceWorker();
             $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
             });
+
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
 
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar, #content').toggleClass('active');
                 $('.collapse.in').toggleClass('in');
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
+     
         });
   </script>
 </body>
