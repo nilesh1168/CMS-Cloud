@@ -10,7 +10,12 @@ import boto3
 
 comprehend = client = boto3.client('comprehend')
 
-@app.route("/",methods = ['GET','POST'])
+@app.route("/",methods = ['GET'])
+def start():
+    return render_template("db.html")    
+
+
+@app.route("/dashboard",methods = ['GET','POST'])
 @login_required
 def home():
     sessions = db.session.query(Session).filter(Session.scheduled_on > datetime.datetime.now()).all()
