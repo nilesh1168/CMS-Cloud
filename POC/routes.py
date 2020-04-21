@@ -12,7 +12,7 @@ comprehend = client = boto3.client('comprehend')
 
 @app.route("/",methods = ['GET'])
 def start():
-    return render_template("db.html")    
+    return render_template("landing.html")    
 
 
 @app.route("/dashboard",methods = ['GET','POST'])
