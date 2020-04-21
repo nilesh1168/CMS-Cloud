@@ -14,6 +14,7 @@
       padding: 20px;
       margin-bottom: 0;
       border-radius: 10px;
+      
     }
     .navbar-brand img {
   height: 100%;
@@ -45,7 +46,7 @@
   color: white;
 }
 
-    
+
     /* Set gray background color and 100% height */
     
     .text1 {
@@ -57,6 +58,9 @@
       background-color: #555;
       color: white;
       padding: 15px;
+    }
+    h1.font {
+      font-size: 200%;
     }
     
     /* On small screens, set height to 'auto' for sidenav and grid */
@@ -85,19 +89,18 @@
       <ul class="nav navbar-nav">
         <li><a class="navbar-brand" href="#">
           <img class="img-responsive" width="130px" height="" src="prudent_logo1.jpeg"></a></li>
-        <li class="active"><a href="#">Home</a></li>
+        <li class="active"><a href="#" style="color:grey;" >Home</a></li>
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">Courses
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color: grey;">Courses
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">POG-PLACEMENT ORIENTED GROOMING</a></li>
-            <li><a href="#">C.CPP & DATA STRUCTURES</a></li>
-            <li><a href="#">ANGULAR JS</a></li>
-            <li><a href="#">ANGULAR JS+NODE JS(MEAN STACK)</a></li>
-            <li><a href="#">CORE JAVA</a></li>
+              <li><a href="#">POG-PLACEMENT ORIENTED GROOMING</a></li>
+              <li><a href="#">C.CPP & DATA STRUCTURES</a></li>
+              <li><a href="#">ANGULAR JS</a></li>
+              <li><a href="#">ANGULAR JS+NODE JS(MEAN STACK)</a></li>
+              <li><a href="#">CORE JAVA</a></li>
           </ul>
         </li>
-        <li><a href="#">Contact us</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li> <a href="{{ url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
@@ -109,16 +112,15 @@
 </nav>
     <div class="hero-image"> 
     <div class="hero-text"> 
-      <h1>Welcome</h1>
-      <p>Formed in June 2018 , we have embarked on an exciting journey of imparting quality education to students and participants.Training software languages to over 100 students in the first year is an achievement for us.
-        We are into short term courses, workshops and also into placement oriented grooming.We also conduct a 6 month certificate course that takes a student from zero knowledge of software stream to a remarkable confidence in dealing with the full stack areas of software industry.</p>
-      <p>The main aim is to groom the participants to succeed in placement drives . We enhance logic building skills and coding skills. We envisage that participants are empowered with a huge confidence and get equipped to join the software industry.</p>
-      <hr>
+      <h1 style="font-size: 70px">PRUDENT<br>Software & Grooming Academy</h1>
+      <p>We intend to provide a helping hand to students and freshers aspiring for placement in the IT industry.</p>
+       <hr>
+       <button type="button" class="btn btn-info btn-lg"><a href="contact_us.html"><span class="glyphicon glyphicon-log-in"></span> Contact us</a></button>
     </div>
     </div>
    
 <footer class="container-fluid text-center">
-  <p>Footer Text</p>
+  <p>Prudent Software & Grooming Academy, Pune</p>
 </footer>
 </body>
 </html>
