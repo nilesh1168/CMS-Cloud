@@ -12,7 +12,7 @@ comprehend = client = boto3.client('comprehend')
 
 @app.route("/",methods = ['GET'])
 def start():
-    return render_template("landing.html")    
+    return render_template("start.html")    
 
 
 @app.route("/dashboard",methods = ['GET','POST'])
@@ -131,7 +131,7 @@ def getFeedback():
         feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
         db.session.commit()
-        return render_template('test.html')
+        return render_template('success.html')
     return render_template("feedbackform.html",form=form)    
 
 
