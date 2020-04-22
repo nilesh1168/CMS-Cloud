@@ -11,14 +11,13 @@
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
       background-color:white;
-      padding: 20px;
+      padding: 10px;
       margin-bottom: 0;
       border-radius: 10px;
       
     }
     .navbar-brand img {
-  height: 100%;
-  margin-right: 20px;
+  height: 250%;
 }
     
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
@@ -27,7 +26,7 @@
 
 
 .hero-image {
-  background-image: url("bg2.jpeg");
+  background-image: url("{{ url_for('static',filename='img/bg2.jpeg') }}");
   background-color: #cccccc;
   height: 700px;
   background-position: center;
@@ -88,7 +87,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li><a class="navbar-brand" href="#">
-          <img class="img-responsive" width="130px" height="" src="prudent_logo1.jpeg"></a></li>
+          <img style="width: 20%;" src="{{ url_for('static',filename='img/prudent_logo1.jpeg') }}"></a></li>
         <li class="active"><a href="#" style="color:grey;" >Home</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color: grey;">Courses

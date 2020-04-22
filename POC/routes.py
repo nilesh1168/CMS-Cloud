@@ -202,9 +202,6 @@ def getAOI():
     d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
     return d
 
-@app.route("/showanswers",methods=['GET','POST'])
-def showAnswers():
-    pass
 
 @app.route("/filter",methods=['GET'])
 def filter():

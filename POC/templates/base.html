@@ -2,142 +2,103 @@
 <html lang="en">
 <head>
     {{ JSGlue.include() }}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}{% endblock %}</title>
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- Custom CSS -->
-    <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet">
-    <!-- Scrollbar Custom CSS -->
-    <link href="{{ url_for('static',filename='css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+   <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link href="{{ url_for('static',filename='css/simple-sidebar.css')}}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/0be09ead75.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    
-    <div class="wrapper">
-        <!-- Sidebar -->
-        <nav id="sidebar" class=>
-          <div class="sidebar-header">
-              <h3>Prudent Grooming</h3>
-          </div>
-          <ul class="list-unstyled">
-            {% if current_user.is_anonymous %}
-                <p class="mb-0">Welcome</p>
-            {% else %}
-                <p class="mb-0">Welcome</p>
-                <h4 class="text-center p-0">{{ current_user.username }}</h4>
-            {% endif %} 
-              <li class="active">
-                  <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-                  <ul class="collapse list-unstyled" id="homeSubmenu">
-                    {% if current_user.is_anonymous %}
-                      <li>
-                          <a href="{{ url_for('login')}}">Login</a>
-                      </li>
-                      <li>
-                          <a href="{{ url_for('register') }}">Register</a>
-                      </li>
-                    {% else %}
-                    <li>
-                        <a href="{{ url_for('home') }}">Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('logout') }}">Logout</a>
-                    </li>  
-                      <li>
-                          <a href="{{ url_for('start_session') }}">Feedback</a>
-                      </li>
-                  </ul>
-              </li>
-              <li class="active">
-                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">More</a>
-                <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li>
-                        <a href="{{ url_for('schedule') }}">Arrange Session</a>
-                    </li>
-                    <li>
-                        <a href="#">Send Invites</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('getStudents') }}">Show Attendees</a>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('getSessions') }}">Arranged Sessions</a>
-                    </li>
-                </ul>
-            </li> 
-            {% endif %}
-              <li>
-                <a href="#">About</a>
-                </li>
-              <li>
-                  <a href="#">Contact</a>
-              </li>
-          </ul>
-      </nav>
-        <!-- Page Content -->
+    <nav class="navbar navbar-default no-margin">
+    <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header fixed-brand">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"  id="menu-toggle">
+                      <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><i class="fa fa-rocket fa-4"></i> PRUDENT </a>
+                </div><!-- navbar-header-->
 
-        <div id="content">
-          <nav class="navbar navbar-expand-lg navbar-light bg-light p-0 mt-2">
-            <div>
-                <button type="button" id="sidebarCollapse" class="btn btn-info">
-                    <i class="fas fa-align-left"></i>
-                    <span></span>
-                </button>
-    
-            </div>
-        </nav>
-        {% with messages = get_flashed_messages() %}
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <ul class="nav navbar-nav">
+                                <li class="active" ><button class="navbar-toggle collapse in" data-toggle="collapse" id="menu-toggle-2"> <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span></button></li>
+                            </ul>
+                            
+                </div><!-- bs-example-navbar-collapse-1 -->
+    </nav>
+    <div id="wrapper" class="toggled-2">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            {% if not current_user.is_anonymous %}
+            <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+
+                <li>
+                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fas fa-tachometer-alt fa-stack-1x "></i></span> Dashboard</a>       
+                </li>
+                <li>
+                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span> Shortcut</a>
+                    <ul class="nav-pills nav-stacked" style="list-style-type:none;">
+                        <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span>link1</a></li>
+                        <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span>link2</a></li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('schedule') }}"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-clock fa-stack-1x "></i></span>Arrange Sessions</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('getSessions') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-list-ul fa-stack-1x "></i></span>Show Arranged Sessions</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('getStudents') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-user fa-stack-1x "></i></span>Show Attendees</a>
+                </li>
+            </ul>
+            {% endif %}
+        </div><!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid xyz">
+                <div class="row">
+                    <div class="col-md-4">                        
+                    </div>
+                    <div class="col-md-4">
+                        {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <div style="margin-top: 5%;"></div>
     {% for message in messages %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div id = "display_msg" class="col-md-4 alert alert-warning text-center rcorners my-2" role="alert">{{message}}
+            <div id = "display_msg" class="alert alert-warning text-center rcorners" role="alert">{{message}}
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
-            <div class="col-md-4"></div>
-        </div>
-    </div>
     {% endfor %}
     </ul>
     {% endif %}
     {% endwith %}
-        {% block page_content %}
+                    </div>
+                    <div class="col-md-4">                        
+                    </div>
+                </div>
+                {% block page_content %}
 
-        {% endblock%}
-        </div>
+                {% endblock%}
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
     
-    </div> 
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="{{ url_for('static',filename='js/notification.js') }}"></script>
-    <!-- Scrollable JS -->
-    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
-    
-    <script>
-        $(document).ready(function () {
-            registerServiceWorker();
-            $("#sidebar").mCustomScrollbar({
-                theme: "minimal"
-            });
-
-                $('#sidebar, #content').toggleClass('active');
-                $('.collapse.in').toggleClass('in');
-                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar, #content').toggleClass('active');
-                $('.collapse.in').toggleClass('in');
-                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-            });
-     
-        });
-  </script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='js/sidebar_menu.js') }}"></script>
 </body>
 </html>
