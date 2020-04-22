@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +13,30 @@
     {% block page_content %}
     <div class="container-fluid">
         <h3 class="text-center text-dark my-4">Atendees</h3>
-        
-        <p class="text-right"> <input id="myInput" type="text" placeholder="Search.."> </p> 
+        <div class="container">
+            Filters
+            <ul id = "filter" class="nav nav-tabs">
+                <li><a id="city" data-toggle="tab" href="#menu1">City</a></li>
+                <li><a id="domain" data-toggle="tab" href="#menu2">Session</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="menu1" class="tab-pane fade">
+                    <ul class="nav nav-pills">
+                    </ul>
+                </div>
+                <div id="menu2" class="tab-pane fade">
+                   <ul class="nav nav-pills">
+                    </ul>
+                </div> 
+            </div>
+
+        </div>
+
+
+        <div class="text-right" style="padding-top:20px ; padding-bottom:20px ;"> 
+            <input id="myInput" type="text" placeholder="Search..">
+        </div> 
 
         <table class="table table-hover">
             <thead class="thead-inverse">
@@ -26,46 +49,23 @@
                 </tr>
                 </thead>
                 <tbody id="myTable">
-                    {% for stud in students.items %}
-                    <tr>
-                        <td scope="row">{{ stud[0] }}</td>
-                        <td>{{ stud.email }}</td>
-                        <td>{{ stud.city }}</td>
-                        <td>{{ stud.description }}</td>
-                        <td>{{ stud.name }}</td>
-                    </tr>
-                    {% endfor %}
+                   
                 </tbody>
         </table>
     </div>
     <hr>
     <div class="container-fluid text-center">
-
-            {% if prev %}
-            <a href="{{ prev }}">Newer</a>
-            {% endif %}
-            {% for page in range(1,pages+1) %}
-                {% if cur_page == page %}
-                    <u><a href = "{{ url_for('getStudents',page = page ) }}" >{{ page }}</a></u>
-                {% else %}
-                    <a href= "{{ url_for('getStudents',page = page ) }}" >{{ page }}</a>
-                {% endif %}
-            {% endfor %}    
-        
-            {% if next %}
-            <a href="{{ next }}">Older</a>
-            {% endif %}
+        <ul id="paginate-link" class="list-inline">
+            
+        </ul>
+            
 
     </div>   
     <hr>   
-    <script>
-               $("#myInput").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
-    </script>  
+    <script src="{{ url_for('static',filename='js/studentdetail.js') }}"></script>  
     {% endblock %}
 </body>
 </html>
+
+
+ 

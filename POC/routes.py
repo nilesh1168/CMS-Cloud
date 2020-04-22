@@ -134,18 +134,48 @@ def getFeedback():
         return render_template('test.html')
     return render_template("feedbackform.html",form=form)    
 
+
 @app.route("/show",methods=['GET','POST'])
 def getStudents():
     """To view all the Student attendees"""
-    page = request.args.get('page', 1,type = int)
+    return render_template("students.html")#,students = students,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
 
+@app.route("/show_all_students",methods=['GET'])
+def getAllStudents():
+    """To view all the Student attendees"""
+    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
     pages = students.pages
     cur_page = students.page
     next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
     prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return render_template("students.html",students = students,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}    
+
+@app.route("/getCity",methods=['GET'])
+def getCity():
+    city = request.args.get('city',"Pune",type = str)
+    page = request.args.get('page', 1,type = int)
+    query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
+    pages = students.pages
+    cur_page = students.page
+    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
+    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
+    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
+    
+
+@app.route("/getSession",methods=['GET'])
+def getSession():
+    session = request.args.get('session',"",type = str)
+    page = request.args.get('page', 1,type = int)
+    query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).filter(Session.name == session).subquery()
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
+    pages = students.pages
+    cur_page = students.page
+    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
+    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
+    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
 
 
 
@@ -174,13 +204,13 @@ def getAOI():
 
 @app.route("/showanswers",methods=['GET','POST'])
 def showAnswers():
-    arr = request.args.get("data")
-    print(type(arr))
-    #print(request.environ['REMOTE_ADDR'])
-    print(request.environ['HTTP_X_FORWARDED_FOR'])
-    #print(request.environ.get('HTTP_X_REAL_IP', request.remote_addr))
-    return render_template('answers.html',answer=arr)
+    pass
 
+@app.route("/filter",methods=['GET'])
+def filter():
+    city = db.session.query(StudInfo.city).distinct().all()
+    ses = db.session.query(Session.name).distinct().all()
+    return {'city': city,'session':ses }    
 
 @app.route("/service-worker.js",methods = ['GET','POST'])
 def load_service():
@@ -189,3 +219,4 @@ def load_service():
 @app.errorhandler(404)
 def page_not_found(error):
     return 'This route does not exist {}'.format(request.url), 404
+

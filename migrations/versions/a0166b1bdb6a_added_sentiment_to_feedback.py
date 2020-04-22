@@ -1,8 +1,8 @@
-"""added sentiment to feedback
+"""added sentiment to Feedback
 
-Revision ID: cdc820cc2c86
+Revision ID: a0166b1bdb6a
 Revises: 0d30a496ac8f
-Create Date: 2020-04-03 13:53:39.532144
+Create Date: 2020-04-21 18:36:18.536867
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cdc820cc2c86'
+revision = 'a0166b1bdb6a'
 down_revision = '0d30a496ac8f'
 branch_labels = None
 depends_on = None

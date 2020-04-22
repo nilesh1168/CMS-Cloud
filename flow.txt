@@ -16,3 +16,30 @@ CREATE EVENT myevent
     ON SCHEDULE AT 2020-04-02 14:00:00 + INTERVAL 5 MINUTES
     DO
       DELETE from test1 where test1.time = test1.time ;
+
+
+<!-- {% for stud in students.items %}
+                    <tr>
+                        <td scope="row">{{ stud[0] }}</td>
+                        <td>{{ stud.email }}</td>
+                        <td>{{ stud.city }}</td>
+                        <td>{{ stud.description }}</td>
+                        <td>{{ stud.name }}</td>
+                    </tr>
+                    {% endfor %} -->
+
+
+                    <!-- {% if prev %}
+            <a href="{{ prev }}">Newer</a>
+            {% endif %}
+            {% for page in range(1,pages+1) %}
+                {% if cur_page == page %}
+                    <u><a href = "{{ url_for('getStudents',page = page ) }}" >{{ page }}</a></u>
+                {% else %}
+                    <a href= "{{ url_for('getStudents',page = page ) }}" >{{ page }}</a>
+                {% endif %}
+            {% endfor %}    
+        
+            {% if next %}
+            <a href="{{ next }}">Older</a>
+            {% endif %} -->

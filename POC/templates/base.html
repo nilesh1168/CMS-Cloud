@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {{ JSGlue.include() }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
-        <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-datetimepicker.min.css') }}">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- Custom CSS -->
     <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet">
-    <!-- Bootstrap CSS CDN -->
-    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
-   
     <!-- Scrollbar Custom CSS -->
-  <link href="{{ url_for('static',filename='css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
-  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>   
-  <!-- Bootstrap tooltips -->
-  <script type="text/javascript" src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
+    <link href="{{ url_for('static',filename='css/jquery.mCustomScrollbar.min.css') }}" rel="stylesheet">
+
 </head>
 <body>
     
@@ -57,7 +52,7 @@
                       </li>
                   </ul>
               </li>
-              <li>
+              <li class="active">
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">More</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
@@ -118,17 +113,13 @@
         </div>
     
     </div> 
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="{{ url_for('static',filename='js/notification.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
-    <!-- Bootstrap core JavaScript -->
-    <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
     <!-- Scrollable JS -->
     <script type="text/javascript" src="{{ url_for('static',filename='js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/solid.js') }}"></script>
-    <!-- Font Awesome JS -->
-    <script type="text/javascript" src="{{ url_for('static',filename='js/fontawesome.js') }}"></script>
     
-    <!-- <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrap-datetimepicker.min.js') }}"></script> -->
     <script>
         $(document).ready(function () {
             registerServiceWorker();

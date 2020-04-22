@@ -24,6 +24,7 @@ Flask==1.1.1
 Flask-API==2.0
 Flask-Bootstrap4==4.0.2
 Flask-HTTPAuth==3.3.0
+Flask-JSGlue==0.3.1
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
 Flask-Migrate==2.5.2
