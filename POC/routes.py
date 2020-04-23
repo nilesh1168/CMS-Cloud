@@ -25,6 +25,8 @@ def getCert():
 
 @app.route("/",methods = ['GET'])
 def start():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     return render_template("start.html")    
 
 
@@ -231,6 +233,13 @@ def filter():
     city = db.session.query(StudInfo.city).distinct().all()
     ses = db.session.query(Session.name).distinct().all()
     return {'city': city,'session':ses }    
+
+@app.route("/send_invites",methods=['GET','POST'])
+def sendInvites():
+    sessions = db.session.query(Session).filter(Session.scheduled_on > datetime.datetime.now()).all()
+    if request.method == 'POST':
+        pass
+    return render_template("sendinvites.html",sessions=sessions)
 
 @app.route("/service-worker.js",methods = ['GET','POST'])
 def load_service():
