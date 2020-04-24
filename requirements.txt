@@ -51,6 +51,8 @@ Mako==1.0.12
 Markdown==2.6.9
 MarkupSafe==1.1.1
 mysql-connector-python==8.0.19
+numpy==1.18.3
+pandas==1.0.3
 parso==0.5.1
 pathspec==0.7.0
 pdfkit==0.6.1
