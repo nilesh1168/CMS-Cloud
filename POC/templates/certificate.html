@@ -62,7 +62,7 @@ html {
   display: inline-block;
   width: 1024px;
   height: 768px;
-background: #eee url("cert1.jpg") no-repeat; background-size: 100%;
+background: #eee url("{{ url_for('static',filename="img/cert1.jpg")}}") no-repeat; background-size: 100%;
 }
 
 h1#cert-holder {
