@@ -1,0 +1,97 @@
+div#cert-footer {
+    position: absolute;
+    width: 60%;
+    top: 480px;
+    text-align: center;
+    margin: 30px 20px;
+  }
+  
+  #cert-stamp, #cert-ceo-sign {
+    width: 60%;
+    display: inline-block;
+    
+  }
+  
+  div#cert-issued-by, div#cert-ceo-design {
+    width: 40%;
+    display: inline-block;
+    float: left;  
+  }
+  p.text {
+      margin: 10px 20px;
+  
+  }
+  
+  
+  div#cert-ceo-design {
+    margin-left: 10%;
+  }
+  
+  h1 {
+    font-family: 'Saira Condensed', sans-serif;
+    margin: 5px 50px;
+  }
+  h2 {
+    font-family: 'Saira Condensed', sans-serif;
+    margin: 5px 210px;
+  }
+  
+  body {
+   
+    width: 950px;
+    height: 690px;
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    margin: 20px 150px;
+  }
+  
+  p {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    margin: 20px 50px;
+  }
+  
+  
+  html {
+    display: inline-block;
+    width: 1024px;
+    height: 768px;
+    background: #eee url("cert1.jpg") no-repeat; background-size: 100%;
+  }
+  
+  h1#cert-holder {
+    font-size: 50px;
+    color: #be2d24;
+    margin: 30px 100px
+  }
+  
+  p.smaller {
+    font-size: 17px !important;
+    margin: 20px 210px;
+  }
+  
+  p.stamp {
+      margin: 20px 200px;
+      margin-bottom: 200px;
+  
+  } 
+  
+  div#cert-desc {
+    width: 70%;
+  }
+  
+  p#cert-from {
+    color: #be2d24;
+    font-family: 'Saira Condensed', sans-serif;
+  
+  }
+  
+  div#cert-verify {
+    opacity: 1;
+    position: absolute;
+    top: 680px;
+    left: 60%;
+    font-size: 12px;
+    color: grey;
+  }

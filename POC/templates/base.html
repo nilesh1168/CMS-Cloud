@@ -48,7 +48,7 @@
             <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
 
                 <li>
-                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fas fa-tachometer-alt fa-stack-1x "></i></span> Dashboard</a>       
+                    <a href="{{ url_for('home') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-tachometer-alt fa-stack-1x "></i></span> Dashboard</a>       
                 </li>
                 <li>
                     <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span> Shortcut</a>
@@ -59,7 +59,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
+                    <a href="{{ url_for('sendInvites') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
                 </li>
                 <li>
                     <a href="{{ url_for('schedule') }}"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-clock fa-stack-1x "></i></span>Arrange Sessions</a>
@@ -69,6 +69,9 @@
                 </li>
                 <li>
                     <a href="{{ url_for('getStudents') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-user fa-stack-1x "></i></span>Show Attendees</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('logout') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-sign-out-alt fa-stack-1x "></i></span>Logout</a>
                 </li>
             </ul>
             {% endif %}
@@ -106,5 +109,10 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='js/sidebar_menu.js') }}"></script>
+    <script src="{{ url_for('load_service') }}"></script>
+    <script src="{{ url_for('static',filename='js/notification.js') }}"></script>
+    <script>
+        registerServiceWorker();
+    </script>
 </body>
 </html>

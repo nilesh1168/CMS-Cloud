@@ -1,4 +1,19 @@
 self.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open('appCache').then(function(cache) {
+      return cache.addAll(
+        [
+          '/static/js/jquery-3.4.1.min.js',
+          '/static/css/simple-sidebar.css',
+          '/static/css/cert1.jpg',
+          '/static/js/getdata.js',
+          '/static/js/notification.js',
+          '/static/js/sidebar_menu.js',
+          '/static/js/studentdetail.js'
+        ]
+      );
+    })
+  );
 });
 
 self.addEventListener('activate', event => {

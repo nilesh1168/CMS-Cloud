@@ -12,6 +12,9 @@ class Config():
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://admin:admin123@prudent.cgpamkh0cvsh.us-west-2.rds.amazonaws.com:3306/dummy' # DB URL //username:password@address:port/dbname this is the format. 
     SQLALCHEMY_TRACK_MODIFICATIONS  = False
     SERVICE_WORKER_PATH = base_dir #this is the service worker by which we get notifications.
-
-
-print(base_dir)
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT =  465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'developernil98@gmail.com'
+    MAIL_PASSWORD = 'dattaraj@898'
+    CERT_PATH = base_dir+'/certificate/'

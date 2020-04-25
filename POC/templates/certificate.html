@@ -1,5 +1,6 @@
 <html>
     <head>
+<<<<<<< HEAD
         <style>
 
 
@@ -102,6 +103,10 @@ div#cert-verify {
 }
 
 </style
+=======
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/cert.css') }}">
+        <!-- <style> @page { size: letter landscape; margin: 2cm; } </style> -->
+>>>>>>> e55280baa6ccd25b7f2f556939b6371bd0152eaf
 </head>
 <body>
 <br><br><br><br>
@@ -112,7 +117,7 @@ div#cert-verify {
 </p>
 
 <h1 id="cert-holder">
-  Firstname Surname
+  {{ s_name }}
 </h1>
 
 <p class="smaller" id='cert-completed-line'>
@@ -120,13 +125,13 @@ div#cert-verify {
 </p>
 
 <h2 id="cert-course">
-  Course in Question
+  {{ session_name }}
 </h2>
 
 <div id="cert-desc">
   <p  id='cert-details'>
 <center>
-    which includes the knowledge of English for Technical Conversations, Applied Mathematics, General Robotics Science, Basic Computing, Web & Mobile Development and Basic User Interface Design.
+    which includes the knowledge of {{ domain }}.
     </center>
     </p>
 </div>
@@ -135,10 +140,9 @@ div#cert-verify {
 <p id="cert-from" class="smaller">
  from www.companywebsite.com
 </p>
- 
-<br>
+
 <p class="text" id='cert-issued'>
- <b>Issued on:</b> {{date}}.
+ <b>Issued on:</b> {{ date }}.
 </p>
 
 <div id="cert-footer">
