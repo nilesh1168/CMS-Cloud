@@ -8,7 +8,6 @@ from werkzeug.urls import url_parse
 import datetime
 from POC.entity import feedbackEntity
 import boto3
-import pdfkit
 from wkhtmltopdfwrapper import WKHtmlToPdf
 
 comprehend = client = boto3.client('comprehend')
