@@ -209,16 +209,30 @@ def getSessions():
     sessions = Session.query.paginate(1,app.config['ENTRIES_PER_PAGE'],False)
     return render_template("sessions.html",title='Sessions',sessions = sessions.items)
 
-@app.route("/delsession/<s_id>",methods=['GET','POST'])
-def del_Session(s_id):
+@app.route("/delsession",methods=['GET','POST'])
+def del_Session():
     """To delete arranged sessions"""
-    s = Session.query.filter_by(s_id = s_id).first()
+    s = Session.query.filter_by(s_id = request.args.get('s_id')).first()
     db.session.delete(s)
     db.session.commit()
     flash("Session Deleted!!")
     l = get_flashed_messages()
     return l[0]
-    
+
+@app.route("/editsession/<id>",methods=['GET', 'POST'])
+def edit_Session(id):
+    s = Session.query.filter_by(s_id =id)
+    sess = s.first()
+    if sess:
+        form = ArrangeSessionForm()
+        if request.method == 'POST':
+            # save edits
+            flash('Album updated successfully!')
+            return redirect(url_for('schedule'))
+        return render_template("createsession.html", title = "Schedule", form = form,sessions=sess)
+    else:
+        return 'Error loading #{id}'.format(id=id)
+
 @app.route("/getdata",methods=['GET'])
 def getAOI():
     data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
