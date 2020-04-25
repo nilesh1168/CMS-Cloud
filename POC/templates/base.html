@@ -112,7 +112,9 @@
     <script src="{{ url_for('load_service') }}"></script>
     <script src="{{ url_for('static',filename='js/notification.js') }}"></script>
     <script>
-        registerServiceWorker();
+        $(function () {
+            registerServiceWorker(); 
+        });
     </script>
 </body>
 </html>
