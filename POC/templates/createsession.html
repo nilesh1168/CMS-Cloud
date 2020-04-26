@@ -21,7 +21,7 @@
                     <h3 class="text-center">Edit Session</h3>
                     {{ wtf.form_field(form.session_name,value=sessions.name) }}
                     {{ wtf.form_field(form.session_domain,value=sessions.domain) }}
-                    {{ wtf.form_field( form.session_date,placeholder=sessions.scheduled_on.strftime("%d/%m/%Y, %H:%M")) }}
+                    {{ wtf.form_field( form.session_date,value=sessions.scheduled_on.strftime('%Y-%m-%d ,%H:%M')) }}
                     {{ wtf.form_field(form.submit) }}
                 {% else %}
                 <h3 class="text-center">Schedule Session</h3>
