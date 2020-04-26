@@ -16,11 +16,6 @@ comprehend = client = boto3.client('comprehend')
 def cert(s_name,session_name,domain,date):
     return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date)
 
-@app.route('/getCert',methods=['GET'])
-def getCert():
-    
-    print(url_for('static',filename='css/cert.css'))
-
 
 @app.route("/",methods = ['GET'])
 def start():
@@ -85,13 +80,11 @@ def schedule():
     form = ArrangeSessionForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            print(form.session_domain.data)
-            print(type(form.session_date.data))
             session = Session(name = form.session_name.data ,domain = form.session_domain.data ,scheduled_on= form.session_date.data)
             db.session.add(session)
             db.session.commit()
             flash("Session created Successfully!!")
-            return redirect(url_for('schedule'))
+            return redirect(url_for('getSessions'))
     return render_template("createsession.html", title = "Schedule", form = form)
 
 @app.route("/feedback",methods = ['GET'])
@@ -221,15 +214,18 @@ def del_Session():
 
 @app.route("/editsession/<id>",methods=['GET','POST'])
 def edit_Session(id):
-    s = Session.query.filter_by(s_id =id)
-    sess = s.first()
+    print(id)
+    s = Session.query.filter_by(s_id =id).first()
     form = ArrangeSessionForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            print('successfull')
-            flash('Album updated successfully!')
-            return redirect(url_for('schedule'))        
-    return render_template("createsession.html", title = "Schedule", form = form,sessions=sess)
+    if request.method == 'POST' and form.validate():
+        s.name = form.session_name.data
+        s.domain = form.session_domain.data
+        s.scheduled_on = form.session_date.data       
+        db.session.add(s)
+        db.session.commit()
+        flash("Session modified Successfully!!")
+        return redirect(url_for('getSessions'))        
+    return render_template("createsession.html", title = "Schedule", form = form,sessions=s)
 
 @app.route("/getdata",methods=['GET'])
 def getAOI():
