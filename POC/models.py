@@ -81,7 +81,7 @@ class StudInfo(db.Model):
     mobile = db.Column(db.BigInteger(), primary_key = True,autoincrement=False)
     name = db.Column(db.String(70))
     email = db.Column(db.String(50))
-    address = db.Column(db.String(150))
+    address = db.Column(db.String(300))
     city = db.Column(db.String(30))
     feedback = db.relationship('Feedback',backref='Student_Info')
     response = db.relationship('Response',backref='Student_Info')
