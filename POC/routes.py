@@ -1,18 +1,32 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory , redirect, url_for, flash, get_flashed_messages
+from flask import Flask, render_template, request, jsonify, send_from_directory , redirect, url_for, flash, get_flashed_messages, make_response
 from POC.forms import FeedbackForm, LoginForm, RegistrationForm, ArrangeSessionForm
 from flask_login import current_user, login_user , logout_user, login_required, user_logged_in
-from POC import app,db
+from flask_mail import Message, Attachment
+from POC import app,db,mail
 from POC.models import Admin, Session, StudInfo, Response, Feedback
 from werkzeug.urls import url_parse
 import datetime
 from POC.entity import feedbackEntity
 import boto3
+from wkhtmltopdfwrapper import WKHtmlToPdf
 
 comprehend = client = boto3.client('comprehend')
 
+@app.route('/cert')
+def cert(s_name,session_name,domain,date):
+    return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date)
+
+@app.route('/getCert',methods=['GET'])
+def getCert():
+    
+    print(url_for('static',filename='css/cert.css'))
+
+
 @app.route("/",methods = ['GET'])
 def start():
-    return render_template("landing.html")    
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    return render_template("start.html")    
 
 
 @app.route("/dashboard",methods = ['GET','POST'])
@@ -62,6 +76,7 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
 
 @app.route("/schedule",methods=['GET','POST'])
 @login_required
@@ -123,15 +138,24 @@ def getFeedback():
         stud.session.append(feedbackEntity.session)
         db.session.add(stud)
         db.session.add(res)
-        db.session.commit()
+        #db.session.commit()
         """Add Feedback
             API call for sentiment  
         """
         sentiment = comprehend.detect_sentiment(Text=form.feedback.data, LanguageCode='en')
         feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
-        db.session.commit()
-        return render_template('test.html')
+        #db.session.commit()
+        """ Generate PDF Certificate """ 
+        wkhtmltopdf = WKHtmlToPdf('-T 10 -B 10 -O Landscape -s Letter --zoom 1.5')
+        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=feedbackEntity.session.name,domain = feedbackEntity.session.domain ,date =datetime.date.today() ,_external=True), app.config['CERT_PATH']+"cert.pdf")
+        """Mail the certificate to the participant"""
+        msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+feedbackEntity.session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
+        with app.open_resource("certificate/cert.pdf") as fp:
+            msg.attach("certificate.pdf",content_type="application/pdf", data=fp.read())
+        mail.send(msg)
+
+        return render_template('success.html')
     return render_template("feedbackform.html",form=form)    
 
 
@@ -185,16 +209,30 @@ def getSessions():
     sessions = Session.query.paginate(1,app.config['ENTRIES_PER_PAGE'],False)
     return render_template("sessions.html",title='Sessions',sessions = sessions.items)
 
-@app.route("/delsession/<s_id>",methods=['GET','POST'])
-def del_Session(s_id):
+@app.route("/delsession",methods=['GET','POST'])
+def del_Session():
     """To delete arranged sessions"""
-    s = Session.query.filter_by(s_id = s_id).first()
+    s = Session.query.filter_by(s_id = request.args.get('s_id')).first()
     db.session.delete(s)
     db.session.commit()
     flash("Session Deleted!!")
     l = get_flashed_messages()
     return l[0]
-    
+
+@app.route("/editsession/<id>",methods=['GET', 'POST'])
+def edit_Session(id):
+    s = Session.query.filter_by(s_id =id)
+    sess = s.first()
+    if sess:
+        form = ArrangeSessionForm()
+        if request.method == 'POST':
+            # save edits
+            flash('Album updated successfully!')
+            return redirect(url_for('schedule'))
+        return render_template("createsession.html", title = "Schedule", form = form,sessions=sess)
+    else:
+        return 'Error loading #{id}'.format(id=id)
+
 @app.route("/getdata",methods=['GET'])
 def getAOI():
     data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
@@ -202,15 +240,19 @@ def getAOI():
     d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
     return d
 
-@app.route("/showanswers",methods=['GET','POST'])
-def showAnswers():
-    pass
 
 @app.route("/filter",methods=['GET'])
 def filter():
     city = db.session.query(StudInfo.city).distinct().all()
     ses = db.session.query(Session.name).distinct().all()
     return {'city': city,'session':ses }    
+
+@app.route("/send_invites",methods=['GET','POST'])
+def sendInvites():
+    sessions = db.session.query(Session).filter(Session.scheduled_on > datetime.datetime.now()).all()
+    if request.method == 'POST':
+        pass
+    return render_template("sendinvites.html",sessions=sessions)
 
 @app.route("/service-worker.js",methods = ['GET','POST'])
 def load_service():

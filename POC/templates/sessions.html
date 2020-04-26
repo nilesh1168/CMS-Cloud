@@ -10,7 +10,6 @@
 </head>
 <body>
     {% block page_content %}
-    <script type="text/javascript" src="{{ url_for('static',filename='js/fontawesome.js') }}"></script>
     <div class="container-fluid">
         <h3 class="text-center text-dark my-4">Sessions</h3>
         <table class="table table-hover">
@@ -29,7 +28,8 @@
                         <td>{{ session.name }}</td>
                         <td>{{ session.domain }}</td>
                         <td>{{ session.scheduled_on }}</td>
-                        <td><a onclick="del({{ session.s_id }})"><i style="cursor:pointer" class="fas fa-trash-alt"></i></a></td>
+                        <td><a href="{{ url_for('edit_Session',id=session.s_id) }}"><i style="cursor:pointer" class="fas fa-edit"></i></a></td>
+                        <td><a onclick="del({{ session.s_id }})"><i style="cursor:pointer" class="fa fa-trash"></i></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -39,7 +39,7 @@
         function del(id){
             $.ajax({
                 type: "post",
-                url: "/delsession/"+id,
+                url: Flask.url_for('del_Session',{'s_id':id}),
                 success: function (response) {
                     $('#'+id).hide();
                     console.log(response);

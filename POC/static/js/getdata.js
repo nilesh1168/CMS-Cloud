@@ -2,7 +2,7 @@
     google.charts.load('current', {'packages':['corechart']});
     $.ajax({
     type: "get",
-    url: "/getdata",
+    url: Flask.url_for('getAOI'),
     success: function (response) {
 
     // Draw the pie chart and bar chart when Charts is loaded.
@@ -34,7 +34,7 @@
          var sentchart_options = {title:'Feedback Analysis',
                        width:500,
                        height:300,
-                       colors: ['red','#ADAD85' , 'green']
+                       colors: ['#de6621','red','#ADAD85' , 'green']
                                  };
         var sentchart = new google.visualization.PieChart(document.getElementById('bar-chart'));
         sentchart.draw(sent, sentchart_options);

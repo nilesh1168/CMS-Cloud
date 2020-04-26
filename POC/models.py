@@ -56,7 +56,7 @@ class Feedback(db.Model):
     date = db.Column(db.Date())
     time = db.Column(db.Time())
     areaofinterest = db.Column(db.String(20),nullable = False)
-    description = db.Column(db.String(200),nullable = False)
+    description = db.Column(db.String(1300),nullable = False)
     session = db.Column(db.Integer(),db.ForeignKey('Session.s_id'))
     mobile = db.Column(db.BigInteger(),db.ForeignKey('Student_Info.mobile'))
     sentiment = db.Column(db.String(10),nullable = False)
