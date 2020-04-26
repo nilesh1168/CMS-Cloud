@@ -219,19 +219,17 @@ def del_Session():
     l = get_flashed_messages()
     return l[0]
 
-@app.route("/editsession/<id>",methods=['GET', 'POST'])
+@app.route("/editsession/<id>",methods=['GET','POST'])
 def edit_Session(id):
     s = Session.query.filter_by(s_id =id)
     sess = s.first()
-    if sess:
-        form = ArrangeSessionForm()
-        if request.method == 'POST':
-            # save edits
+    form = ArrangeSessionForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            print('successfull')
             flash('Album updated successfully!')
-            return redirect(url_for('schedule'))
-        return render_template("createsession.html", title = "Schedule", form = form,sessions=sess)
-    else:
-        return 'Error loading #{id}'.format(id=id)
+            return redirect(url_for('schedule'))        
+    return render_template("createsession.html", title = "Schedule", form = form,sessions=sess)
 
 @app.route("/getdata",methods=['GET'])
 def getAOI():
