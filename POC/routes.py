@@ -196,7 +196,7 @@ def getSession():
 
 @app.route('/report/<s_id>',methods=['GET','POST'])
 def genReport(s_id):
-    response = Response.query.filter(session = s_id).all()
+    response = db.session.query(Response.answer,Response.session).filter(Response.session == s_id).all()
     return {'Response' : response}
 
 
