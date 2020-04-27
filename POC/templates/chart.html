@@ -10,8 +10,12 @@
   <div id="chartContainer" style="height:500px; width: 700px;"></div>
   <h1>{{ id }}</h1>
   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-  <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
-  <script></script>
+  <script type="text/javascript">
+    window.appConfig = {
+      session_id: {{ id }}
+    }
+    </script>
+    <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
   {% endblock%} 
 </body>
 </html>
