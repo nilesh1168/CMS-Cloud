@@ -265,6 +265,7 @@ function createSessionPagination(response) {
 }
 
 $(document).ready(function () {
+
     $.ajax({
         type: "get",
         async: false,
@@ -274,6 +275,7 @@ $(document).ready(function () {
             createPagination(response)
         }
     });
+
 
     $.ajax({
         type: "get",
