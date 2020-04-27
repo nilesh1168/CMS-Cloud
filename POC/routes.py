@@ -42,7 +42,6 @@ def register():
         # mail.send(msg)
         # message = client.messages.create(to="+91"+form.mobile.data ,from_="+12509002936",body="Thank You for registering with Daily Task Lister!")
         db.session.add(admin)
-        
         db.session.commit()
         flash("Registered Successfully!!")
         return redirect(url_for('login'))        
