@@ -1,12 +1,10 @@
    $(document).ready(function () {
-       console.log(appConfig.session_id)
+       
        $.ajax({
-           type: "method",
-           url: "url",
-           data: "data",
-           dataType: "dataType",
+           type: "GET",
+           url:  Flask.url_for('genReport',{'id':appConfig.session_id}),
            success: function (response) {
-               
+            console.log(appConfig.session_id)
            }
        });
     });
