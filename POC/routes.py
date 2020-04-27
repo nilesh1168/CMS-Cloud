@@ -232,7 +232,13 @@ def edit_Session(id):
         return redirect(url_for('getSessions'))        
     return render_template("createsession.html", title = "Schedule", form = form,sessions=s)
 
-@app.route("/getdata",methods=['GET'])
+@app.route("/getdata1",methods=['GET'])
+def getAOI1():
+    data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
+    data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
+    d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
+    return d
+@app.route("/chartdata",methods=['GET'])
 def getAOI():
     data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
     data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
