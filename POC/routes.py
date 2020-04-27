@@ -219,7 +219,13 @@ def REPORT():
     id = request.args.get('id')
     response = Response.query.filter_by(session=id).all()
     questions = calcAnswers(response)
+    feed_pos = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='NEGATIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
+    feed_neg = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='POSITIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
+    questions['feed_pos']= int(feed_pos[0])
+    questions['feed_neg']=int(feed_neg[0])
     return questions
+
+
 
 
 @app.route("/sessions",methods=['GET','POST'])
@@ -254,7 +260,7 @@ def edit_Session(id):
     return render_template("createsession.html", title = "Schedule", form = form,sessions=s)
 
 @app.route("/getdata",methods=['GET'])
-def getAOI1():
+def getAOI():
     data_aoi = db.session.query(Feedback.areaofinterest ,db.func.count(Feedback.areaofinterest)).group_by(Feedback.areaofinterest).all()
     data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
     d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
