@@ -197,13 +197,17 @@ def getSession():
 @app.route('/report/<s_id>',methods=['GET','POST'])
 def genReport(s_id):
     response = Response.query.filter_by(session=s_id).all()
-    return render_template("chart.html",Response=response, id=response[0].session)
+    return render_template("chart.html",id=response[0].session)
     
 
-@app.route('/report',methods=['GET','POST'])
+@app.route('/getReport',methods=['GET','POST'])
 def REPORT():
-    
-   
+    id = request.args.get('id')
+    questions = {'Q1':{'YES':25,'NO':30}}
+    response = Response.query.filter_by(session=id).all()
+    res = response[0].answer
+    print(res)
+    return questions
 
 
 @app.route("/sessions",methods=['GET','POST'])
