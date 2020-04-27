@@ -49,8 +49,41 @@
                   includeZero: false
                 }    
               });
-            
-            chart.render();
+              chart.render();
+    var chart = new CanvasJS.Chart("chartContainer1",
+    {
+      title:{
+        text: "Feedback Analysis",
+        fontFamily: "tahoma",
+        fontSize:25,
+      },
+
+      legend:{
+        verticalAlign: "bottom",
+        horizontalAlign: "center"
+      },
+      theme:"light2",
+      data: [
+      {
+        //startAngle: 45,
+       indexLabelFontSize: 20,
+       indexLabelFontFamily: "Garamond",
+       indexLabelFontColor: "darkgrey",
+       indexLabelLineColor: "darkgrey",
+       indexLabelPlacement: "outside",
+       type: "doughnut",
+       showInLegend: true,
+       dataPoints: [
+       {  y: response["feed_pos"], legendText:"POSITIVE"},
+       {  y: response["feed_neg"], legendText: "NEGATIVE"}
+       ]
+     }
+     ]
+   });
+    chart.render();
+
+  
+ 
             }
        });
     });

@@ -223,6 +223,7 @@ def REPORT():
     feed_neg = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='POSITIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
     questions['feed_pos']= int(feed_pos[0])
     questions['feed_neg']=int(feed_neg[0])
+    print(questions)
     return questions
 
 
