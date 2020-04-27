@@ -31,6 +31,7 @@
    </style>
 </head>
 <body>
+    
     <nav class="navbar navbar-default no-margin">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand">
@@ -84,6 +85,9 @@
         </div><!-- /#sidebar-wrapper -->
         <!-- Page Content -->
         <div id="page-content-wrapper">
+            {% block session %}
+
+            {% endblock%}
             <div class="container-fluid xyz">
                 <div class="row">
                     <div class="col-md-4">                        

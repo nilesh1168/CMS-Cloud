@@ -211,7 +211,7 @@ def genReport(s_id):
     response = Response.query.filter_by(session=s_id).first()
     session = Session.query.filter_by(s_id=s_id).first()
     print(type(response))
-    return render_template("chart.html",id=response.session,name=session.name,title="nilyaaa")
+    return render_template("chart.html",id=response.session,name=session.name,title="Prudent")
     
 
 @app.route('/getReport',methods=['GET','POST'])

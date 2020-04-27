@@ -2,7 +2,12 @@
 {% block title %}
 {{ title }}
 {% endblock%}
+<body>
+  {% block session %}
+  <h1 style="text-align: center;"><b>{{ name }}</b></h1>
+    {% endblock%}
   {% block page_content %}
+  
   <div id="chartContainer" style="height:400px; width: 500px;"></div>
   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
   <script type="text/javascript">

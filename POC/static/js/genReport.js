@@ -6,8 +6,12 @@
            success: function (response) {
                   var chart = new CanvasJS.Chart("chartContainer", {            
                   title:{ 
-                    text: "Pop-up Questions Analysis"              
+                    text :"Pop-up Questions Analysis",
+                    fontFamily: "tahoma",
+                    fontSize:25,
+                              
                   },
+
                   theme:"light2",
                   dataPointWidth: 20,
                   data: [  //array of dataSeries     
