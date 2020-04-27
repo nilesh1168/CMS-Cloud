@@ -195,6 +195,11 @@ def getSession():
     return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
 
 
+@app.route('/report/<s_id>',methods=['GET','POST'])
+def genReport(s_id):
+    response = Response.query.filter(session = s_id).all()
+    return {'Response' : response}
+
 
 @app.route("/sessions",methods=['GET','POST'])
 def getSessions():
