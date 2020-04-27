@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
-<!DOCTYPE HTML>
-<html>
-<head>
- 
-</head>
-<body>
-  
+{% block title %}
+{{ title }}
+{% endblock%}
   {% block page_content %}
   <div id="chartContainer" style="height:400px; width: 500px;"></div>
   <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>

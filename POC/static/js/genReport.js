@@ -5,14 +5,9 @@
            url:  Flask.url_for('REPORT',{'id':appConfig.session_id}),
            success: function (response) {
                   var chart = new CanvasJS.Chart("chartContainer", {            
-                  title:{
-                    "verticalAlign": "bottom",
-                    "horizontalAlign": "center",
+                  title:{ 
                     text: "Pop-up Questions Analysis"              
                   },
-
-                  horizontalAlign: "center",
-                  verticalAlign: "center",
                   theme:"light2",
                   dataPointWidth: 20,
                   data: [  //array of dataSeries     
@@ -24,10 +19,10 @@
                    showInLegend: true,
                    dataPoints: [
                    { label: "Question 1", y: response["Q1"]["YES"] },
-                   { label: "Question 2", y: 69 },
-                   { label: "Question 3", y: 80 },                                    
-                   { label: "Question 4", y: 74 },
-                   { label: "Question 5", y: 64 }
+                   { label: "Question 2", y: response["Q2"]["YES"] },
+                   { label: "Question 3", y: response["Q3"]["YES"] },                                                                      
+                   { label: "Question 4", y: response["Q4"]["YES"] },
+                   { label: "Question 5", y: response["Q5"]["YES"] }
                    ]
                  },
             
@@ -38,10 +33,10 @@
                   showInLegend: true,               
                   dataPoints: [
                   { label: "Question 1", y: response["Q1"]["NO"] },
-                  { label: "Question 2", y: 73 },
-                  { label: "Question 3", y: 88 },                                    
-                  { label: "Question 4", y: 77 },
-                  { label: "Question 5", y: 60 }
+                  { label: "Question 2", y: response["Q2"]["NO"] },
+                  { label: "Question 3", y: response["Q3"]["NO"] },                                    
+                  { label: "Question 4", y: response["Q4"]["NO"] },
+                  { label: "Question 5", y: response["Q5"]["NO"] }
                   ]
                 }
                 ],
