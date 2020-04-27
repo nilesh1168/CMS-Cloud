@@ -12,6 +12,18 @@ from wkhtmltopdfwrapper import WKHtmlToPdf
 
 comprehend = client = boto3.client('comprehend')
 
+def calcAnswers(responses):
+    questions = {'Q1':{'YES':0,'NO':0},'Q2':{'YES':0,'NO':0},'Q3':{'YES':0,'NO':0},'Q4':{'YES':0,'NO':0},'Q5':{'YES':0,'NO':0}}
+    switcher ={ 1:'Q1',2:'Q2',3:'Q3',4:'Q4',5:'Q5'}
+    for resp in responses:
+        t = resp.answer.split(',')
+        for i,ans in enumerate(t,start=1):
+            questions[switcher[i]][ans] = questions[switcher[i]][ans]+1
+    return questions
+
+
+
+
 @app.route('/cert')
 def cert(s_name,session_name,domain,date):
     return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date)
@@ -203,10 +215,8 @@ def genReport(s_id):
 @app.route('/getReport',methods=['GET','POST'])
 def REPORT():
     id = request.args.get('id')
-    questions = {'Q1':{'YES':25,'NO':30}}
     response = Response.query.filter_by(session=id).all()
-    res = response[0].answer
-    print(res)
+    questions = calcAnswers(response)
     return questions
 
 
