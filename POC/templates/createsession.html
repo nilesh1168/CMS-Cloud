@@ -16,14 +16,14 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-4">
-                <form action="{{ url_for('edit_Session')}}" method="post">
                 {% if sessions %}
+                <form method="post">
                     {{ form.hidden_tag() }}
                     <h3 class="text-center">Edit Session</h3>
                     {{ wtf.form_field(form.session_name,value=sessions.name) }}
                     {{ wtf.form_field(form.session_domain,value=sessions.domain) }}
                     {{ wtf.form_field( form.session_date,value=sessions.scheduled_on.strftime('%Y-%m-%dT%H:%M')) }}
-                    {{ wtf.form_field(form.submit) }}  
+                    {{ wtf.form_field(form.submit) }}
                 </form>  
                 {% else %}
                 <h3 class="text-center">Schedule Session</h3>
