@@ -3,65 +3,76 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {% block title %} {{ title }} {% endblock %}
 </head>
+
 <body>
     {% block page_content %}
-        <h3 class="text-center text-dark">Atendees</h3>
-        <div class="container">
-            Filters
-            <ul id = "filter" class="nav nav-tabs">
-                <li><a id="city" data-toggle="tab" href="#menu1">City</a></li>
-                <li><a id="domain" data-toggle="tab" href="#menu2">Session</a></li>
-            </ul>
-
-            <div class="tab-content">
-                <div id="menu1" class="tab-pane fade">
-                    <ul class="nav nav-pills">
-                    </ul>
-                </div>
-                <div id="menu2" class="tab-pane fade">
-                   <ul class="nav nav-pills">
-                    </ul>
-                </div> 
-            </div>
-
-        </div>
-
-
-        <div class="text-right" style="padding-top:20px ; padding-bottom:20px ;"> 
-            <input id="myInput" type="text" placeholder="Search..">
-        </div> 
-        <table class="table table-hover">
-            <thead class="thead-inverse">
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>City</th>
-                    <th>Feedback</th>
-                    <th>Session</th>
-                </tr>
-                </thead>
-                <tbody id="myTable">
-                   
-                </tbody>
-        </table>
-    <hr>
-    <div class="container-fluid text-center">
-        <ul id="paginate-link" class="list-inline">
-            
+    <script src="{{ url_for('static',filename='js/jPages.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/jPages.css') }}">
+    <h3 class="text-center text-dark">Atendees</h3>
+    <div class="container">
+        Filters
+        <ul id="filter" class="nav nav-tabs">
+            <li><a id="city" data-toggle="tab" href="#menu1">City</a></li>
+            <li><a id="domain" data-toggle="tab" href="#menu2">Session</a></li>
         </ul>
 
-    </div>   
-    <hr>   
+        <div class="tab-content">
+            <div id="menu1" class="tab-pane fade">
+                <ul class="nav nav-pills">
+                </ul>
+            </div>
+            <div id="menu2" class="tab-pane fade">
+                <ul class="nav nav-pills">
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="text-right" style="padding-top:20px ; padding-bottom:20px ;">
+        <input id="myInput" type="text" placeholder="Search..">
+    </div>
+
+    <table class="table table-hover">
+        <thead class="thead-inverse">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Feedback</th>
+                <th>Session</th>
+            </tr>
+        </thead>
+        <tbody id="itemContainer">
+                {% for stud in students %}
+                <tr>
+                    <td>{{ stud[0] }}</td>
+                    <td>{{ stud[1] }}</td>
+                    <td>{{ stud[2] }}</td>
+                    <td>{{ stud[3] }}</td>
+                    <td>{{ stud[4] }}</td>
+                </tr>     
+                {% endfor %}
+        </tbody>
+    </table>
+
+    <hr>
+    <div class="container-fluid text-center">
+        <div class="holder">
+
+        </div>
+    </div>
+    <hr>
     <script src="{{ url_for('static',filename='js/studentdetail.js') }}"></script>
     {% endblock %}
 </body>
+
 </html>
-
-
- 

@@ -166,31 +166,17 @@ def getFeedback():
 @app.route("/show",methods=['GET','POST'])
 def getStudents():
     """To view all the Student attendees"""
-    return render_template("students.html")#,students = students,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
-
-@app.route("/show_all_students",methods=['GET'])
-def getAllStudents():
-    """To view all the Student attendees"""
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}    
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
+    return render_template("students.html",students = students)#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+
 
 @app.route("/getCity",methods=['GET'])
 def getCity():
     city = request.args.get('city',"Pune",type = str)
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).all()
+    return { 'students':students }
     
 
 @app.route("/getSession",methods=['GET'])
