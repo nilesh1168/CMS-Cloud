@@ -33,11 +33,6 @@ success: function (response) {
 
 
 
-
-
-
-    
-// Draw the pie chart and bar chart when Charts is loaded.
    var arr_sent = []
     for (let index = 0; index < response['sentiment'].length; index++) {
         arr_sent.push(
@@ -63,8 +58,8 @@ success: function (response) {
         data: [{
             type: "pie",
             showInLegend: true,
-            toolTipContent: "{name}: <strong>{y}%</strong>",
-            indexLabel: "{name} - {y}%",
+            toolTipContent: "{name}: <strong>{y}</strong>",
+            indexLabel: "{name} - {y}",
             dataPoints: arr_sent
         }]
     });
