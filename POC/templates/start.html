@@ -42,10 +42,10 @@ body, html {
 
     <!-- Right-sided navbar links -->
     <div class="w3-right w3-hide-small">
-      <a href="#about" class="w3-bar-item w3-button">ABOUT</a>
-      <a href="#contact" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i> CONTACT</a>
-      <a href="{{ url_for('login')}}" class="w3-bar-item w3-button"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN</a>
-      <a href="{{ url_for('register')}}" class="w3-bar-item w3-button"><i class="fa fa-user" aria-hidden="true"></i>REGISTER</a>
+      <a href="#about"  data-toggle="tooltip" data-placement="right" title="about" class="w3-bar-item w3-button">ABOUT</a>
+      <a href="#contact" class="w3-bar-item w3-button"  data-toggle="tooltip" data-placement="right" title="contact us" ><i class="fa fa-envelope"></i> CONTACT</a>
+      <a href="{{ url_for('login')}}" class="w3-bar-item w3-button"  data-toggle="tooltip" data-placement="right" title="login"><i class="fa fa-sign-in" aria-hidden="true"></i> LOGIN</a>
+      <a href="{{ url_for('register')}}" class="w3-bar-item w3-button"  data-toggle="tooltip" data-placement="right" title="grt registered first"><i class="fa fa-user" aria-hidden="true"></i>REGISTER</a>
     </div>
     <!-- Hide right-floated links on small screens and replace them with a menu icon -->
 

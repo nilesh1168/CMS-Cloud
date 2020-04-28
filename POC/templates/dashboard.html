@@ -38,12 +38,21 @@
     {% endif %}
   </div>
   <div class="container mt-4" >
-    <div class="row align-items-center">
-      <div class="col-md-6" id = "pie-chart"></div>
-      <div class="col-md-6"  id="bar-chart"></div>
+    <div class="row">
+      <!--<div class="col-md-6" id = "pie-chart"></div>
+      <div class="col-md-6"  id="bar-chart"></div>-->
+      <div class="col-md-6" id="chartContainer1" style="height: 400px; width: 600px;position: relative;"></div>
+
+      <div class="col-md-6" id="chartContainer" style="height: 400px; width: 600px;position: absolute;
+      right: 7%;
+      top: 22%;"></div>
+    
     </div>
   </div>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+ 
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+     
+  <!--<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>-->
   <script type= "text/javascript" src = "{{ url_for('static',filename='js/getdata.js') }}" ></script>
     {% endblock %}
 </body>
