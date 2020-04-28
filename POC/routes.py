@@ -22,14 +22,21 @@ from sumy.summarizers.lex_rank import LexRankSummarizer
 
 comprehend = client = boto3.client('comprehend')
 
+def calcAnswers(responses):
+    questions = {'Q1':{'YES':0,'NO':0},'Q2':{'YES':0,'NO':0},'Q3':{'YES':0,'NO':0},'Q4':{'YES':0,'NO':0},'Q5':{'YES':0,'NO':0}}
+    switcher ={ 1:'Q1',2:'Q2',3:'Q3',4:'Q4',5:'Q5'}
+    for resp in responses:
+        t = resp.answer.split(',')
+        for i,ans in enumerate(t,start=1):
+            questions[switcher[i]][ans] = questions[switcher[i]][ans]+1
+    return questions
+
+
+
+
 @app.route('/cert')
 def cert(s_name,session_name,domain,date):
     return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date)
-
-@app.route('/getCert',methods=['GET'])
-def getCert():
-    
-    print(url_for('static',filename='css/cert.css'))
 
 
 @app.route("/",methods = ['GET'])
@@ -57,7 +64,6 @@ def register():
         # mail.send(msg)
         # message = client.messages.create(to="+91"+form.mobile.data ,from_="+12509002936",body="Thank You for registering with Daily Task Lister!")
         db.session.add(admin)
-        
         db.session.commit()
         flash("Registered Successfully!!")
         return redirect(url_for('login'))        
@@ -95,13 +101,11 @@ def schedule():
     form = ArrangeSessionForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            print(form.session_domain.data)
-            print(type(form.session_date.data))
             session = Session(name = form.session_name.data ,domain = form.session_domain.data ,scheduled_on= form.session_date.data)
             db.session.add(session)
             db.session.commit()
             flash("Session created Successfully!!")
-            return redirect(url_for('schedule'))
+            return redirect(url_for('getSessions'))
     return render_template("createsession.html", title = "Schedule", form = form)
 
 @app.route("/feedback",methods = ['GET'])
@@ -172,31 +176,17 @@ def getFeedback():
 @app.route("/show",methods=['GET','POST'])
 def getStudents():
     """To view all the Student attendees"""
-    return render_template("students.html")#,students = students,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
-
-@app.route("/show_all_students",methods=['GET'])
-def getAllStudents():
-    """To view all the Student attendees"""
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}    
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
+    return render_template("students.html",students = students)#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+
 
 @app.route("/getCity",methods=['GET'])
 def getCity():
     city = request.args.get('city',"Pune",type = str)
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).all()
+    return { 'students':students }
     
 
 @app.route("/getSession",methods=['GET'])
@@ -210,6 +200,28 @@ def getSession():
     next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
     prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
     return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
+
+
+@app.route('/report/<s_id>',methods=['GET','POST'])
+def genReport(s_id):
+    response = Response.query.filter_by(session=s_id).first()
+    session = Session.query.filter_by(s_id=s_id).first()
+    print(type(response))
+    return render_template("chart.html",id=response.session,name=session.name,title="Prudent")
+    
+
+@app.route('/getReport',methods=['GET','POST'])
+def REPORT():
+    id = request.args.get('id')
+    response = Response.query.filter_by(session=id).all()
+    questions = calcAnswers(response)
+    feed_pos = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='NEGATIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
+    feed_neg = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='POSITIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
+    questions['feed_pos']= int(feed_pos[0])
+    questions['feed_neg']=int(feed_neg[0])
+    print(questions)
+    return questions
+
 
 
 
@@ -229,19 +241,20 @@ def del_Session():
     l = get_flashed_messages()
     return l[0]
 
-@app.route("/editsession/<id>",methods=['GET', 'POST'])
+@app.route("/editsession/<id>",methods=['GET','POST'])
 def edit_Session(id):
-    s = Session.query.filter_by(s_id =id)
-    sess = s.first()
-    if sess:
-        form = ArrangeSessionForm()
-        if request.method == 'POST':
-            # save edits
-            flash('Album updated successfully!')
-            return redirect(url_for('schedule'))
-        return render_template("createsession.html", title = "Schedule", form = form,sessions=sess)
-    else:
-        return 'Error loading #{id}'.format(id=id)
+    print(id)
+    s = Session.query.filter_by(s_id =id).first()
+    form = ArrangeSessionForm()
+    if request.method == 'POST' and form.validate():
+        s.name = form.session_name.data
+        s.domain = form.session_domain.data
+        s.scheduled_on = form.session_date.data       
+        db.session.add(s)
+        db.session.commit()
+        flash("Session modified Successfully!!")
+        return redirect(url_for('getSessions'))        
+    return render_template("createsession.html", title = "Schedule", form = form,sessions=s)
 
 @app.route("/getdata",methods=['GET'])
 def getAOI():
@@ -249,6 +262,7 @@ def getAOI():
     data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
     d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
     return d
+
 
 
 @app.route("/filter",methods=['GET'])

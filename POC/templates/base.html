@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>
+        {% block title %}
+
+        {% endblock%}
+       - PSGA
+    </title>
     {{ JSGlue.include() }}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,23 +14,24 @@
     <meta name="description" content="">
     <meta name="author" content="">
    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css')}}">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-theme.min.css') }}" >
     <link href="{{ url_for('static',filename='css/simple-sidebar.css')}}" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
     <script src="https://kit.fontawesome.com/0be09ead75.js" crossorigin="anonymous"></script>
     <style>
-         .body
-        {
+        .body
+       {
             background-image: url("{{ url_for('static',filename="img/tq1.jpg")}}");
-        }
-    </style>
+       }
+   </style>
 </head>
 <body>
+    
     <nav class="navbar navbar-default no-margin">
     <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header fixed-brand">
@@ -78,6 +85,9 @@
         </div><!-- /#sidebar-wrapper -->
         <!-- Page Content -->
         <div id="page-content-wrapper">
+            {% block session %}
+
+            {% endblock%}
             <div class="container-fluid xyz">
                 <div class="row">
                     <div class="col-md-4">                        
@@ -109,10 +119,5 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="{{ url_for('static',filename='js/sidebar_menu.js') }}"></script>
-    <script src="{{ url_for('load_service') }}"></script>
-    <script src="{{ url_for('static',filename='js/notification.js') }}"></script>
-    <script>
-        registerServiceWorker();
-    </script>
 </body>
 </html>

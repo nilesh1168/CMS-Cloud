@@ -25,10 +25,10 @@
                     {% for session in sessions %}
                     <tr id = "{{ session.s_id }}">
                         <td scope="row">{{ session.s_id }}</td>
-                        <td>{{ session.name }}</td>
+                        <td><a href="{{ url_for('genReport',s_id = session.s_id ) }}">{{ session.name }}</a></td>
                         <td>{{ session.domain }}</td>
                         <td>{{ session.scheduled_on }}</td>
-                        <td><a href="{{ url_for('edit_Session',id=session.s_id) }}"><i style="cursor:pointer" class="fas fa-edit"></i></a></td>
+                        <td><a href="{{ url_for('edit_Session',id = session.s_id ) }}"><i style="cursor:pointer" class="fas fa-edit"></i></a></td>
                         <td><a onclick="del({{ session.s_id }})"><i style="cursor:pointer" class="fa fa-trash"></i></a></td>
                     </tr>
                     {% endfor %}
