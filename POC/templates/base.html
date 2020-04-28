@@ -53,15 +53,8 @@
                     <a href="{{ url_for('home') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-tachometer-alt fa-stack-1x "></i></span> Dashboard</a>       
                 </li>
                 <li>
-                    <a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span> Shortcut</a>
-                    <ul class="nav-pills nav-stacked" style="list-style-type:none;">
-                        <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span>link1</a></li>
-                        <li><a href="#"><span class="fa-stack fa-lg pull-left"><i class="fa fa-flag fa-stack-1x "></i></span>link2</a></li>
-
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ url_for('sendInvites') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
+                
+                    <a href="{{ url_for('sendInvites') }}"  data-toggle="tooltip" data-placement="right" title="send invites"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
                 </li>
                 <li>
                     <a href="{{ url_for('schedule') }}"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-clock fa-stack-1x "></i></span>Arrange Sessions</a>
@@ -85,9 +78,9 @@
             {% endblock%}
             <div class="container-fluid xyz">
                 <div class="row">
-                    <div class="col-md-4">                        
+                    <div class="col-md-6">                        
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
@@ -99,8 +92,7 @@
     {% endif %}
     {% endwith %}
                     </div>
-                    <div class="col-md-4">                        
-                    </div>
+                   
                 </div>
                 {% block page_content %}
 

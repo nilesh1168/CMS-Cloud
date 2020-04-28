@@ -1,43 +1,86 @@
 // Load Charts and the corechart and barchart packages.
-    google.charts.load('current', {'packages':['corechart']});
-    $.ajax({
-    type: "get",
-    url: Flask.url_for('getAOI'),
-    success: function (response) {
-
-    // Draw the pie chart and bar chart when Charts is loaded.
-        google.charts.setOnLoadCallback(drawChart);
-        arr_aoi = [['Area of Interest','Count']]
-        for (let index = 0; index < response['AOI'].length; index++) {
-            arr_aoi.push(response['AOI'][index])
-        }
-
-        var arr_sent = [[ 'Sentiment', 'Count' ]]
-        for (let index = 0; index < response['sentiment'].length; index++) {
-            arr_sent.push(response['sentiment'][index])
-        }
-
-        function drawChart() {
-        var aoi = google.visualization.arrayToDataTable(arr_aoi);
-
-        var aoichart_options = {title:'Percentage of Area of Interest',
-                       width:500,
-                       height:300,
-      colors: ['#08B6FF', '#22A3DA', '#2F8AB1', '#3E8BAB', '#5F8A9D']
-                      };
-                       
-        var aoichart = new google.visualization.PieChart(document.getElementById('pie-chart'));
-        aoichart.draw(aoi, aoichart_options);
-   
-        var sent =  google.visualization.arrayToDataTable(arr_sent);
-
-         var sentchart_options = {title:'Feedback Analysis',
-                       width:500,
-                       height:300,
-                       colors: ['#de6621','red','#ADAD85' , 'green']
-                                 };
-        var sentchart = new google.visualization.PieChart(document.getElementById('bar-chart'));
-        sentchart.draw(sent, sentchart_options);
-      }
+$(document).ready(function () {
+       
+$.ajax({
+type: "get",
+url: Flask.url_for('getAOI'),
+success: function (response) {
+    arr_aoi = []
+    for (let index = 0; index < response['AOI'].length; index++) {
+        arr_aoi.push(
+            {
+                y:response['AOI'][index][0],
+            label:response['AOI'][index][1]})
     }
+    var chart = new CanvasJS.Chart("chartContainer1", {
+        animationEnabled: true,
+        theme: "light2", // "light1", "light2", "dark1", "dark2"
+        title:{
+            text: "Area Of Interest"
+        },
+        axisY: {
+            title: "No. of Students Interested",
+            titleFontSize : 15
+        },
+        data: [{        
+            type: "column",  
+             
+            dataPoints: arr_aoi
+        }]
+    });
+    chart.render();
+   
+
+
+
+   var arr_sent = []
+    for (let index = 0; index < response['sentiment'].length; index++) {
+        arr_sent.push(
+            {
+            
+            y : response['sentiment'][index][1],
+            name : response['sentiment'][index][0] }
+            
+            )
+    }
+    console.log(arr_sent)
+
+    var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light2",
+        title:{
+            text: "Feedback Analysis"
+        },
+        legend:{
+            cursor: "pointer",
+            
+        },
+        data: [{
+            type: "pie",
+            showInLegend: true,
+            toolTipContent: "{name}: <strong>{y}</strong>",
+            indexLabel: "{name} - {y}",
+            dataPoints: arr_sent
+        }]
+    });
+    chart.render();
+   
+}
+
+
 });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+

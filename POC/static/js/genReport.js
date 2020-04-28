@@ -4,7 +4,8 @@
            type: "GET",
            url:  Flask.url_for('REPORT',{'id':appConfig.session_id}),
            success: function (response) {
-                  var chart = new CanvasJS.Chart("chartContainer", {            
+                  var chart = new CanvasJS.Chart("chartContainer", { 
+                    animationEnabled: true,           
                   title:{ 
                     text :"Pop-up Questions Analysis",
                     fontFamily: "tahoma",
@@ -52,6 +53,7 @@
               chart.render();
     var chart = new CanvasJS.Chart("chartContainer1",
     {
+        animationEnabled: true,
       title:{
         text: "Feedback Analysis",
         fontFamily: "tahoma",
