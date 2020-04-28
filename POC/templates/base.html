@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css')}}">
 
     <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-theme.min.css') }}" >
     <link href="{{ url_for('static',filename='css/simple-sidebar.css')}}" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
     <script src="https://kit.fontawesome.com/0be09ead75.js" crossorigin="anonymous"></script>
     <style>
         .body

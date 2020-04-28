@@ -1,7 +1,7 @@
 
 $("#myInput").on("keyup", function () {
     var value = $(this).val().toLowerCase();
-    $("#myTable tr").filter(function () {
+    $("#itemContainer tr").filter(function () {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
 });
@@ -17,7 +17,8 @@ function deleteChild(parent) {
 }
 
 function loadData(response) {
-    $("td").remove();
+    $("#itemContainer tr").remove();
+
     for (let index = 0; index < response['students'].length; index++) {
         let dyData = "<td>" + response['students'][index][0] + "</a></td>" +
             "<td>" + response['students'][index][1] + "</td>" +
@@ -26,253 +27,25 @@ function loadData(response) {
             "<td>" + response['students'][index][4] + "</td>";
         $('tbody').append("<tr>" + dyData + "</tr>");
     }
-
-}
-
-function createPagination(response) {
-    deleteChild("#paginate-link")
-    var pag_container = document.getElementById("paginate-link");
-    if (response['prev_url']) {
-        var li = document.createElement('li')
-        li.className = response['cur_page'] - 1
-        li.innerHTML = "Newer"
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-        $("." + (response['cur_page'] - 1)).bind("click", function () {
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getAllStudents', { "page": response['cur_page'] - 1 }),
-                success: function (response) {
-                    console.log("inside main paginate")
-                    loadData(response)
-                    createPagination(response)
-                }
-            });
-        });
-    }
-
-    for (let index = 1; index <= response['pages']; index++) {
-        var li = document.createElement('li')
-        var underline = document.createElement('u')
-        li.className = 'px-3'
-        li.id = index
-        if (response['cur_page'] == index) {
-            underline.innerHTML = index
-            li.appendChild(underline)
-        }
-        else {
-            li.innerHTML = index
-        }
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("#" + index).bind("click", function () {
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getAllStudents', { "page": index }),
-                success: function (response) {
-                    console.log("inside main paginate" + index)
-                    loadData(response)
-                    createPagination(response)
-                }
-            });
-        });
-
-
-
-    }
-
-
-    if (response['next_url']) {
-        var li = document.createElement('li')
-        li.className = response['cur_page'] + 1
-        li.innerHTML = "Older"
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("." + (response['cur_page'] + 1)).bind("click", function () {
-
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getAllStudents', { "page": response['cur_page'] + 1 }),
-                success: function (response) {
-                    console.log("inside main paginate")
-                    loadData(response)
-                    createPagination(response)
-                }
-            });
-        });
-    }
-
-}
-
-
-function createCityPagination(response) {
-    deleteChild("#paginate-link")
-    var pag_container = document.getElementById("paginate-link");
-    if (response['prev_url']) {
-        var li = document.createElement('li')
-        li.className = response['cur_page'] - 1
-        li.innerHTML = "Newer"
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("." + (response['cur_page'] - 1)).bind("click", function () {
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getCity', { "page": response['cur_page'] - 1, "city": response['students'][0][2] }),
-                success: function (response) {
-                    console.log("inside city paginate")
-                    loadData(response)
-                    createCityPagination(response)
-                }
-            });
-        });
-    }
-
-    for (let index = 1; index <= response['pages']; index++) {
-        var li = document.createElement('li')
-        var underline = document.createElement('u')
-        li.className = 'px-3'
-        li.id = index
-        if (response['cur_page'] == index) {
-            underline.innerHTML = index
-            li.appendChild(underline)
-        }
-        else {
-            li.innerHTML = index
-        }
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("#" + index).bind("click", function () {
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getCity', { "page": index, "city": response['students'][0][2] }),
-                success: function (response) {
-                    console.log("inside city paginate")
-                    loadData(response)
-                    createCityPagination(response)
-                }
-            });
-        });
-
-
-
-    }
-
-
-    if (response['next_url']) {
-        var li = document.createElement('li')
-        li.className = response['cur_page'] + 1
-        li.innerHTML = "Older"
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("." + (response['cur_page'] + 1)).bind("click", function () {
-
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getCity', { "page": response['cur_page'] + 1, "city": response['students'][0][2] }),
-                success: function (response) {
-                    console.log("inside city paginate")
-                    loadData(response)
-                    createCityPagination(response)
-                }
-            });
-        });
-    }
-
-}
-
-
-function createSessionPagination(response) {
-    deleteChild("#paginate-link")
-    var pag_container = document.getElementById("paginate-link");
-    if (response['prev_url']) {
-        var li = document.createElement('li')
-        li.className = response['cur_page'] - 1
-        li.innerHTML = "Newer"
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-        $("." + (response['cur_page'] - 1)).bind("click", function () {
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getSession', { "page": response['cur_page'] - 1, "session": response['students'][0][4] }),
-                success: function (response) {
-                    console.log("inside session paginate")
-                    loadData(response)
-                    createSessionPagination(response)
-                }
-            });
-        });
-    }
-
-    for (let index = 1; index <= response['pages']; index++) {
-        var li = document.createElement('li')
-        var underline = document.createElement('u')
-        li.className = 'px-3'
-        li.id = index
-
-        if (response['cur_page'] == index) {
-            underline.innerHTML = index
-            li.appendChild(underline)
-        }
-        else {
-            li.innerHTML = index
-        }
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("#" + index).bind("click", function () {
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getSession', { "page": index, "session": response['students'][0][4] }),
-                success: function (response) {
-                    console.log("inside session paginate")
-                    loadData(response)
-                    createSessionPagination(response)
-                }
-            });
-        });
-
-
-
-    }
-
-
-    if (response['next_url']) {
-        var li = document.createElement('li')
-        li.className = response['cur_page'] + 1
-        li.innerHTML = "Older"
-        li.style = "cursor:pointer"
-        pag_container.appendChild(li)
-
-        $("." + (response['cur_page'] + 1)).bind("click", function () {
-
-            $.ajax({
-                type: "get",
-                url: Flask.url_for('getSession', { "page": response['cur_page'] + 1, "session": response['students'][0][4] }),
-                success: function (response) {
-                    console.log("inside session paginate")
-                    loadData(response)
-                    createSessionPagination(response)
-                }
-            });
-        });
-    }
-
+    $("div.holder").jPages({
+        containerID: "itemContainer",
+        perPage: 15,
+        startPage: 1,
+        startRange: 1,
+        midRange: 5,
+        endRange: 1
+    });
 }
 
 $(document).ready(function () {
-    $.ajax({
-        type: "get",
-        async: false,
-        url: Flask.url_for("getAllStudents"),
-        success: function (response) {
-            loadData(response)
-            createPagination(response)
-        }
+    /* initiate the plugin */
+    $("div.holder").jPages({
+        containerID: "itemContainer",
+        perPage: 15,
+        startPage: 1,
+        startRange: 1,
+        midRange: 5,
+        endRange: 1
     });
 
     $.ajax({
@@ -297,8 +70,8 @@ $(document).ready(function () {
                         type: "get",
                         url: Flask.url_for('getCity', { "city": response['city'][index][0] }),
                         success: function (response) {
+                            console.log(response)
                             loadData(response)
-                            createCityPagination(response)
                         }
                     });
                 });
@@ -319,9 +92,7 @@ $(document).ready(function () {
                         type: "get",
                         url: Flask.url_for('getSession', { "session": response['session'][index][0] }),
                         success: function (response) {
-                            console.log(response)
                             loadData(response)
-                            createSessionPagination(response)
                         }
                     });
                 });

@@ -10,6 +10,16 @@ from POC.entity import feedbackEntity
 import boto3
 from wkhtmltopdfwrapper import WKHtmlToPdf
 
+import string
+from collections import Counter
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+import sumy
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.lex_rank import LexRankSummarizer
+
 comprehend = client = boto3.client('comprehend')
 
 def calcAnswers(responses):
@@ -166,31 +176,17 @@ def getFeedback():
 @app.route("/show",methods=['GET','POST'])
 def getStudents():
     """To view all the Student attendees"""
-    return render_template("students.html")#,students = students,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
-
-@app.route("/show_all_students",methods=['GET'])
-def getAllStudents():
-    """To view all the Student attendees"""
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}    
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
+    return render_template("students.html",students = students)#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+
 
 @app.route("/getCity",methods=['GET'])
 def getCity():
     city = request.args.get('city',"Pune",type = str)
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(StudInfo.city == city).order_by(StudInfo.name).all()
+    return { 'students':students }
     
 
 @app.route("/getSession",methods=['GET'])
@@ -286,6 +282,134 @@ def sendInvites():
 @app.route("/service-worker.js",methods = ['GET','POST'])
 def load_service():
     return send_from_directory(app.config['SERVICE_WORKER_PATH'],'service-worker.js')
+
+@app.route("/xyz",methods = ['GET','POST'])
+def summarization():
+    var = Feedback.query.filter_by(sentiment='POSITIVE').all()
+    list_length=len(var)
+    text_str = ""
+    for i in range(list_length):
+        text_str= text_str + str(var[i].description)
+    
+   # print(text_str)
+    #print("negative feedback")
+    
+   # print(text_str1)
+
+    
+    #word frequency for positive
+    text = text_str
+    lower_case = text.lower()
+    cleaned_text = lower_case.translate(str.maketrans('', '', string.punctuation))
+    tokenized_words = word_tokenize(cleaned_text, "english")
+    final_words = []
+    for word in tokenized_words:
+        if word not in stopwords.words('english'):
+            final_words.append(word)
+
+    w = Counter(final_words)
+    #print(w)
+    List_of_factor = ['practical','content','programming','presented','assignments','instructor',
+                  'explained','skills','basics','knowledege','topics','professor',
+                  'explaining','helped','performance','note','services','clear','qualified',
+                  'instruction','theoretical','mentors','assistance','sound','communicator',
+                  'staff','presentation','teaching','teacher','practice','engaging','structure','quizzes',
+                  'graphs','presenter','explains','specialisation','overview','professors'
+                  'application','explain','resources','tools','covered','knowledgeable','lectures','present',
+                  'applications','structured','graph','english','presentations',
+                  'delivery','technologies','design','technique','organised','organized','contents','speaker',
+                  'details','implement','fundamentals','map','theory','advanced',
+                  'notes','cases','teaches','skill','team','venue','environment','friendly',
+                  'wellstructured','program','discussion','techniques','entertaining','instructors','module',
+                  'conceptual','explanations','implementation','approach','presenting','speak',
+                  'coding','managed','methods','test','described','speaking','language','screen','video','audio',
+                  'audible','implementing','statistical','graphical','visualize','animation','location','clarity',
+                  'method','visualization','visualisation','detailed','members','modules','professional',
+                  'handson','atmosphere','facilitator','balance','indepth','faculty','accessible',
+                  'seminar presenter','activities','management','talented','information','guidance','example',
+                  'interactive','discuss','excellent','chart','scope',
+                  'languages','programs','concepts','characteristics','videos','technology','informative',
+                  'examples','exercise','speakers','teach','teams','materials','structures',
+                  'projects','planning','specialization','code','explanation','format','concept','proficiency',
+                  'expert','experts','accent','powerpoint','slide'
+                 ]
+    
+    dict={}
+    count =0
+    for x in List_of_factor:
+        for y in w:
+            if x==y:
+                count=count+1
+        dict.update({x:count})
+        #print(dict)
+
+     #summary for positive
+    doc=text_str
+    parser=PlaintextParser.from_string(doc,Tokenizer("english"))
+    print(parser)
+
+    summaryP= " "
+    summaryy=LexRankSummarizer()
+    abstract = summaryy(parser.document,1)
+    for sentence in abstract:
+        #print(sentence)
+        summaryP = summaryP + str(sentence)
+    
+    #print(summary1)
+
+    #negative
+    var1 = Feedback.query.filter_by(sentiment='NEGATIVE').all()
+    list_length1=len(var1)
+    text_str1 = ""
+    for i1 in range(list_length1):
+        text_str1= text_str1 + str(var1[i1].description)
+
+    #word frequency for negative
+    text1 = text_str1
+    lower_case1 = text1.lower()
+    cleaned_text1 = lower_case1.translate(str.maketrans('', '', string.punctuation))
+    tokenized_words1 = word_tokenize(cleaned_text1, "english")
+    final_words1 = []
+    for word1 in tokenized_words1:
+        if word1 not in stopwords.words('english'):
+            final_words1.append(word1)
+
+    w1 = Counter(final_words1)
+    #print(w)
+    
+    dict1={}
+    count1 =0
+    for x1 in List_of_factor:
+        for y1 in w1:
+            if x1==y1:
+                count1=count1+1
+        dict1.update({x1:count1})
+        #print(dict)
+
+   
+
+     #summary for negative
+    doc1=text_str1
+    parser1=PlaintextParser.from_string(doc1,Tokenizer("english"))
+    #print(parser1)
+
+    summaryN= " "
+    summaryy1=LexRankSummarizer()
+    abstract1 = summaryy1(parser1.document,1)
+    for sentence1 in abstract1:
+        #print(sentence)
+        summaryN = summaryN + str(sentence1)
+
+        
+    
+    return render_template('xyz.html',freq1=dict,summary=summaryP,freq=dict1,abst=summaryN)
+
+
+
+
+
+
+
 
 @app.errorhandler(404)
 def page_not_found(error):
