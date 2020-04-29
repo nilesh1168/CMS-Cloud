@@ -3,19 +3,27 @@
 {{ title }}
 {% endblock%}
 
+
 <body>
   {% block session %}
   <h1 style="text-align: center;"><b>{{ name }}</b></h1>
     {% endblock%}
   {% block page_content %}
-  <div class="container mt-4" >
-    <div class="row align-items-center">
+  <div class="container" >
+    <div class="row-md-4">
+      <div class="col-md-6" id="chartContainer" style="height:400px; width: 400px;"></div>
+      <div class="col-md-6" id="chartContainer1" style="height:400px; width: 500px;"></div>
+    </div>
+    <div class="row-md-4">
+      <div class="col-md-6">
 
+      </div>
 
-      <div class="col-md-6" id="chartContainer" style="height:400px; width: 400px; position:relative;"></div>
-      <div class="col-md-6" id="chartContainer1" style="height:400px; width: 500px;position: absolute;
-      right: 7%;
-      top: 22%;"></div>
+        <div class="info col-md-6" style="width: 500px; height: 500px;background-color: #e7f3fe;border-left: 6px solid #2196F3;">
+        <p><strong>Info!</strong> Some text...</p>
+        </div>
+    </div>
+    <div class="row-md-4">
 
     </div>
   </div>
@@ -26,6 +34,7 @@
     }
     </script>
     <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/summary.js') }}"></script>
   {% endblock%} 
 </body>
 </html>
