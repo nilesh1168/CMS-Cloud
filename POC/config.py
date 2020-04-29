@@ -18,3 +18,13 @@ class Config():
     MAIL_USERNAME = 'developernil98@gmail.com'
     MAIL_PASSWORD = 'dattaraj@898'
     CERT_PATH = base_dir+'/certificate/'
+
+class TestConfig(Config):
+    TESTING = True
+    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_dir, 'test.db')  # + join(_cwd, 'testing.db')
+
+    # Since we want our unit tests to run quickly
+    # we turn this down - the hashing is still done
+    # but the time-consuming part is left out.
+    HASH_ROUNDS = 1

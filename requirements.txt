@@ -38,7 +38,7 @@ Flask-Migrate==2.5.2
 Flask-PageDown==0.2.2
 Flask-RESTful==0.3.6
 Flask-SQLAlchemy==2.4.0
-Flask-WTF==0.14.2
+Flask-WTF==0.14.3
 greenlet==0.4.15
 gunicorn==20.0.4
 html5lib==1.0.1
@@ -83,7 +83,6 @@ PyMySQL==0.9.3
 pyparsing==2.4.7
 Pyphen==0.9.5
 PySocks==1.7.0
-pytest==5.4.1
 python-dateutil==2.6.1
 python-editor==1.0.4
 pytz==2019.1
@@ -106,7 +105,7 @@ visitor==0.1.3
 wcwidth==0.1.7
 WeasyPrint==51
 webencodings==0.5.1
-Werkzeug==0.16.0
+Werkzeug==1.0.1
 wkhtmltopdf-wrapper==0.3.3
 WTForms==2.1
 zipp==3.1.0
