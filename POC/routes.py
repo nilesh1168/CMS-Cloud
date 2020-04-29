@@ -113,12 +113,8 @@ def summarization(id):
     abstract_neg = summarizer(parser.document,1)
     for sentence in abstract_neg:
         summ_Neg = summ_Neg + str(sentence)
-    print(pos_fact)
     return {'cnt_pos': pos_fact , 'cnt_neg': neg_fact,'summ_pos':summ_Pos,'summ_neg':summ_Neg }    
     #return render_template('xyz.html',freq1=dict,summary=summaryP,freq=dict1,abst=summaryN)
-
-
-
 
 @app.route('/cert')
 def cert(s_name,session_name,domain,date):
