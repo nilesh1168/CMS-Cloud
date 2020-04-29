@@ -51,27 +51,30 @@
     <div id="wrapper" class="toggled-2">
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
+            {% block register %}
+            
+            {% endblock%}
             {% if not current_user.is_anonymous %}
             <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
 
                 <li>
-                    <a href="{{ url_for('home') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-tachometer-alt fa-stack-1x "></i></span> Dashboard</a>       
+                    <a href="{{ url_for('home') }}" data-toggle="tooltip" data-placement="right" title="Dashboard"><span class="fa-stack fa-lg pull-left"><i class="fas fa-tachometer-alt fa-stack-1x "></i></span> Dashboard</a>       
                 </li>
                 <li>
                 
-                    <a href="{{ url_for('sendInvites') }}"  data-toggle="tooltip" data-placement="right" title="send invites"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
+                    <a href="{{ url_for('sendInvites') }}"  data-toggle="tooltip" data-placement="right" title="Send Invites"><span class="fa-stack fa-lg pull-left"><i class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('schedule') }}"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-clock fa-stack-1x "></i></span>Arrange Sessions</a>
+                    <a href="{{ url_for('schedule') }}" data-toggle="tooltip" data-placement="right" title="Arrange Session"> <span class="fa-stack fa-lg pull-left"><i class="fa fa-clock fa-stack-1x "></i></span>Arrange Sessions</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('getSessions') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-list-ul fa-stack-1x "></i></span>Show Arranged Sessions</a>
+                    <a href="{{ url_for('getSessions') }}" data-toggle="tooltip" data-placement="right" title=" Show Arranged Sessions"><span class="fa-stack fa-lg pull-left"><i class="fas fa-list-ul fa-stack-1x "></i></span>Show Arranged Sessions</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('getStudents') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-user fa-stack-1x "></i></span>Show Attendees</a>
+                    <a href="{{ url_for('getStudents') }}" data-toggle="tooltip" data-placement="right" title="Show Attendees"><span class="fa-stack fa-lg pull-left"><i class="fas fa-user fa-stack-1x "></i></span>Show Attendees</a>
                 </li>
                 <li>
-                    <a href="{{ url_for('logout') }}"><span class="fa-stack fa-lg pull-left"><i class="fas fa-sign-out-alt fa-stack-1x "></i></span>Logout</a>
+                    <a href="{{ url_for('logout') }}" data-toggle="tooltip" data-placement="right" title="Logout"><span class="fa-stack fa-lg pull-left"><i class="fas fa-sign-out-alt fa-stack-1x "></i></span>Logout</a>
                 </li>
             </ul>
             {% endif %}

@@ -9,6 +9,15 @@
     {% block title %} {{ title }} {% endblock %}
 </head>
 <body>
+    {% block register %}
+            <ul class="sidebar-nav nav-pills nav-stacked" id="menu">
+
+                <li>
+                    <a href="{{ url_for('login') }}" data-toggle="tooltip" data-placement="right" title="Login"><span class="fa-stack fa-lg pull-left"><i class="fa fa-sign-in"></i></span> Login</a>       
+                </li> 
+            </ul>
+            {% endblock%}   
+
     {% block page_content %}
     <div class="container-fluid">
         <div class="row">
