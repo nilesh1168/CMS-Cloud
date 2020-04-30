@@ -88,7 +88,7 @@ def summarization(id):
         summ_Pos = summ_Pos + str(sentence)
 
     """Summarization and Factors influnce for NEGATIVE feedbacks"""
-    neg_query = Feedback.query.filter_by(sentiment='NEGATIVE').all()
+    neg_query = Feedback.query.filter_by(sentiment='NEGATIVE').filter_by(session=id).all()
     neg_text = ""
     for i1 in range(len(neg_query)):
         neg_text= neg_text + str(neg_query[i1].description)
