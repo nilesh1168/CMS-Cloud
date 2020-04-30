@@ -5,6 +5,7 @@ from POC.models import Admin
 from POC import db
 
 class AdminViewsTests(BaseTestCase):
+    
     def test_admin_can_login(self):
         admin = Admin(username='admin',email='admin@abc.com',mobile=1234567890)
         admin.set_password('pass')
@@ -35,17 +36,9 @@ class AdminViewsTests(BaseTestCase):
             self.client.post("login", data={"username": "admin", "password": "****"}) 
             self.assertTrue(current_user.is_anonymous)
       
-
-    # def test_some_json(self):
-    #     response = self.client.get("/getCity?city=Satara")
-    #     self.assertEquals(response.json, dict(success=True))  
-
-    # def test_assert_not_process_the_template(self):
-    #     response = self.client.get("/template/")
-
-    #     assert "" == response.data
-
-    # def test_assert_mytemplate_used(self):
-    #     response = self.client.get("/template/")
-
-    #     self.assert_template_used('mytemplate.html')    
+    def test_service_worker(self):
+        self.assert200(self.client.get("/service-worker.js"))
+            
+    def test_json_city(self):
+        response = self.client.get("/getCity?city=Satara")
+        self.assertEqual(response.json, dict(students=[]))  
