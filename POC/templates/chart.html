@@ -9,35 +9,167 @@
   <h1 style="text-align: center;"><b>{{ name }}</b></h1>
     {% endblock%}
   {% block page_content %}
-  <div class="container" >
-    <div class="row-md-4">
-      <div class="col-md-6" id="chartContainer" style="height:400px; width: 400px;"></div>
-      <div class="col-md-6" id="chartContainer1" style="height:400px; width: 500px;"></div>
-    </div>
-    <div class="row-md-4">
-      <div class="col-md-6">
+ 
+  <table class="table table-borderless" style="table-layout: fixed;">
+        <tbody>
+           
+            <tr>
+                
+                <td id="chartContainer" style="height:400px; width: 700px;">
+                 
+                </td>
+                <td id="chartContainer1" style="height:400px; width: 700px;">
+               </td> 
+            </tr>
+            <tr>
+            <td>
 
-      </div>
+            </td>
+            </tr>
+            <tr>
+              <td>
+                
+              </td>
+              </tr>
+            <tr>
+              <td>
+                <table class="table table-striped" style="table-layout: fixed;">
+                  <tbody>
+                    <thead class="thead-inverse">
+                     
+                      <tr>
+                          <th>Sr.No.</th>
+                          <th>Positive Factors</th>
+                      </tr>
+                    </thead>
+                    <tr>
+                      <td>1.</td>
+                      <td id="pos_sum1">Loading...</td>
+                    </tr>
+                      <tr>
+                        <td>2.</td>
+                        <td id="pos_sum2">Loading...</td>
+                      </tr>
+                        <tr>
+                          <td>3.</td>
+                          <td id="pos_sum3">Loading...</td>
+                        </tr>
+                          <tr>
+                            <td>4.</td>
+                            <td id="pos_sum4">Loading...</td>
+                          </tr>
+                            <tr>
+                              <td>5.</td>
+                              <td id="pos_sum5">Loading...</td>
+                            </tr>
+                            </tbody>
+                            </table>
+              </td>
+           <td  style="background-color: lightblue;">
 
-        <div class="info col-md-6" style="width: 500px; height: 500px;background-color: #e7f3fe;border-left: 6px solid #2196F3;">
-        <p><strong>Info!</strong> {{ summ_pos }}</p>
-        </div>
-    </div>
-    <div class="row-md-4">
+            <h2>Positive summary</h2>
 
-    </div>
-  </div>
-  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-  <script type="text/javascript">
-    window.appConfig = {
-      session_id: {{ id }}
-    }
-    </script>
-    <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
-    <script src="{{ url_for('static',filename='js/summary.js') }}"></script>
+            <details>
+              <summary id="summ_pos">Loading...</summary>
+            </details>
+          
+           </td>
+              
+          </tr>
+          <tr> 
+            <td></td>
+          </tr>
+          <tr>
+             
+            <td>
+              <table class="table table-striped" style="table-layout: fixed;">
+                <tbody>
+                  <thead class="thead-inverse">
+                   
+                    <tr>
+                        <th>Sr.No.</th>
+                        <th>Negative Factors</th>
+                    </tr>
+                  </thead>
+                  <tr>
+                    <td>1.</td>
+                    <td id="neg_sum1">Loading...</td>
+                  </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td id="neg_sum2">Loading...</td>
+                    </tr>
+                      <tr>
+                        <td>3.</td>
+                        <td id="neg_sum3">Loading...</td>
+                      </tr>
+                        <tr>
+                          <td>4.</td>
+                          <td id="neg_sum4">Loading...</td>
+                        </tr>
+                          <tr>
+                            <td>5.</td>
+                            <td id="neg_sum5">Loading...</td>
+                          </tr>
+                          </tbody>
+                          </table>
+
+
+
+            </td>
+            <td style="background-color: lightblue;">
+
+              <h2>Negative summary</h2>
+
+              <details>
+                <summary id="summ_neg">Loading...</summary>
+              </details>
+            
+
+            </td>
+            
+        </tr>
+            
+        </tbody>
+</table>
+
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+  window.appConfig = {
+    session_id: {{ id }}
+  }
+  </script>
+  <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/summary.js') }}"></script>
+
+  
+    
   {% endblock%} 
 </body>
 </html>
+
+
+<div class="container" >
+  <div class="row-md-4">
+    <div class="col-md-6" id="chartContainer" style="height:400px; width: 400px;"></div>
+    <div class="col-md-6" id="chartContainer1" style="height:400px; width: 500px;"></div>
+  </div>
+  <div class="row-md-4">
+    <div class="col-md-6" id="dvTable">
+
+    </div>
+
+      <div  class="info col-md-6" style="width: 500px; height: 300px;background-color: #e7f3fe;border-left: 6px solid #2196F3;">
+      <p id= "pos_sum"></p>
+      </div>
+  </div>
+  <div class="row-md-4">
+
+  </div>
+</div>
+
+
+
 
 
 

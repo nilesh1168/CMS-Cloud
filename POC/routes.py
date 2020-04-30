@@ -73,11 +73,12 @@ def summarization(id):
 
     """Counting Factors for POSITIVE"""
     w = Counter(final_pos_words) 
-    pos_fact={}
+    a={}
     count =0
     for x in List_of_factor:
         if x in w.keys():
-            pos_fact[x]=w[x]
+            a[x]=w[x]
+    pos_fact = sorted(a.items(), key=lambda x: x[1],reverse=True)    
 
     """Summary of POSITIVE"""
     parser=PlaintextParser.from_string(pos_text,Tokenizer("english"))
@@ -101,20 +102,24 @@ def summarization(id):
 
     """Counting Factors for NEGATIVE"""
     w = Counter(final_neg_words)
-    neg_fact={}
+    b={}
     count = 0
     for x in List_of_factor:
         if x in w.keys():
-            neg_fact[x]=w[x]
-
+            b[x]=w[x]
+    neg_fact = sorted(b.items(), key=lambda x: x[1],reverse=True)
     """Summary of NEGATIVE"""
     parser=PlaintextParser.from_string(neg_text,Tokenizer("english"))
     summ_Neg= " "
     abstract_neg = summarizer(parser.document,1)
     for sentence in abstract_neg:
         summ_Neg = summ_Neg + str(sentence)
-    return {'cnt_pos': pos_fact , 'cnt_neg': neg_fact,'summ_pos':summ_Pos,'summ_neg':summ_Neg }    
+
+    return {'cnt_pos': pos_fact[0:5] , 'cnt_neg': neg_fact[0:5],'summ_pos':summ_Pos,'summ_neg':summ_Neg }    
     #return render_template('xyz.html',freq1=dict,summary=summaryP,freq=dict1,abst=summaryN)
+
+
+
 
 @app.route('/cert')
 def cert(s_name,session_name,domain,date):
@@ -367,4 +372,3 @@ def load_service():
 @app.errorhandler(404)
 def page_not_found(error):
     return 'This route does not exist {}'.format(request.url), 404
-
