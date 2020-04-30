@@ -24,6 +24,7 @@ class TestConfig(Config):
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_dir, 'test.db')  # + join(_cwd, 'testing.db')
     LIVESERVER_PORT = 0
+    MAIL_SUPPRESS_SEND = False
     # Since we want our unit tests to run quickly
     # we turn this down - the hashing is still done
     # but the time-consuming part is left out.
