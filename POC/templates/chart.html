@@ -15,31 +15,22 @@
            
             <tr>
                 
-                <td id="chartContainer" style="height:400px; width: 700px;">
-                 
+                <td>
+                 <div id="chartContainer" class="my-3 mx-3" style="height:300px; width:700px;"></div>
                 </td>
-                <td id="chartContainer1" style="height:400px; width: 700px;">
+                <td>
+                  <div id="chartContainer1" class="my-3 mx-3" style="height:300px; width:700px;"></div>
                </td> 
             </tr>
             <tr>
-            <td>
-
-            </td>
-            </tr>
-            <tr>
-              <td>
-                
-              </td>
-              </tr>
-            <tr>
-              <td>
-                <table class="table table-striped" style="table-layout: fixed;">
+              <td style="padding-top: 100px;padding-left: 75px;padding-right: 75px;padding-bottom: 75px;">
+                <table class="table table-striped" style="table-layout: fixed;text-align: center;">
                   <tbody>
-                    <thead class="thead-inverse">
+                    <thead class="thead-inverse" style="text-align: center;">
                      
                       <tr>
-                          <th>Sr.No.</th>
-                          <th>Positive Factors</th>
+                          <th style="padding-left: 130px;">Sr.No.</th>
+                         <th style="padding-left: 100px;">Positive Factors</th>
                       </tr>
                     </thead>
                     <tr>
@@ -65,30 +56,40 @@
                             </tbody>
                             </table>
               </td>
-           <td  style="background-color: lightblue;">
+           <td  style="padding-top: 100px;padding-left: 75px;padding-right: 75px;padding-bottom: 75px;">
 
-            <h2>Positive summary</h2>
+            <!-- Card -->
+<div class="card ovf-hidden">
 
-            <details>
-              <summary id="summ_pos">Loading...</summary>
-            </details>
-          
+  <!-- Card content -->
+  <div class="card-body" style="background-color:lightsteelblue">
+    <!-- Title -->
+    <h4 class="card-title">Postive Summary</h4>
+    <hr>
+    <!-- Text -->
+    <p class="card-text" id="summ_pos"></p>
+
+  </div>
+
+  <!-- Card reveal -->
+  <div class="card-reveal white">
+
+</div>
+<!-- Card -->
+
+    
            </td>
-              
-          </tr>
-          <tr> 
-            <td></td>
           </tr>
           <tr>
              
-            <td>
-              <table class="table table-striped" style="table-layout: fixed;">
+            <td style="padding: 75px;">
+              <table class="table table-striped" style="table-layout: fixed;text-align: center;">
                 <tbody>
-                  <thead class="thead-inverse">
+                  <thead class="thead-inverse" style="text-align: center;">
                    
                     <tr>
-                        <th>Sr.No.</th>
-                        <th>Negative Factors</th>
+                        <th style="padding-left: 120px;">Sr.No.</th>
+                        <th style="padding-left: 100px;">Negative Factors</th>
                     </tr>
                   </thead>
                   <tr>
@@ -117,14 +118,29 @@
 
 
             </td>
-            <td style="background-color: lightblue;">
+            <td style="padding: 75px;">
 
-              <h2>Negative summary</h2>
+               <!-- Card -->
+<div class="card ovf-hidden">
 
-              <details>
-                <summary id="summ_neg">Loading...</summary>
-              </details>
-            
+  <!-- Card content -->
+  <div class="card-body" style="background-color: lightsteelblue;">
+    <!-- Title -->
+    <h4 class="card-title">Negative Summary</h4>
+    <hr>
+    <!-- Text -->
+    <p class="card-text" id="summ_neg"></p>
+
+  </div>
+
+  <!-- Card reveal -->
+  <div class="card-reveal white">
+
+</div>
+<!-- Card -->
+
+
+
 
             </td>
             
@@ -167,6 +183,9 @@
 
   </div>
 </div>
+
+
+
 
 
 
