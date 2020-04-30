@@ -3,32 +3,192 @@
 {{ title }}
 {% endblock%}
 
+
 <body>
   {% block session %}
   <h1 style="text-align: center;"><b>{{ name }}</b></h1>
     {% endblock%}
   {% block page_content %}
-  <div class="container mt-4" >
-    <div class="row align-items-center">
+ 
+  <table class="table table-borderless" style="table-layout: fixed;">
+        <tbody>
+           
+            <tr>
+                
+                <td>
+                 <div id="chartContainer" class="my-3 mx-3" style="height:300px; width:700px;"></div>
+                </td>
+                <td>
+                  <div id="chartContainer1" class="my-3 mx-3" style="height:300px; width:700px;"></div>
+               </td> 
+            </tr>
+            <tr>
+              <td style="padding-top: 100px;padding-left: 75px;padding-right: 75px;padding-bottom: 75px;">
+                <table class="table table-striped" style="table-layout: fixed;text-align: center;">
+                  <tbody>
+                    <thead class="thead-inverse" style="text-align: center;">
+                     
+                      <tr>
+                          <th style="padding-left: 130px;">Sr.No.</th>
+                         <th style="padding-left: 100px;">Positive Factors</th>
+                      </tr>
+                    </thead>
+                    <tr>
+                      <td>1.</td>
+                      <td id="pos_sum1">Loading...</td>
+                    </tr>
+                      <tr>
+                        <td>2.</td>
+                        <td id="pos_sum2">Loading...</td>
+                      </tr>
+                        <tr>
+                          <td>3.</td>
+                          <td id="pos_sum3">Loading...</td>
+                        </tr>
+                          <tr>
+                            <td>4.</td>
+                            <td id="pos_sum4">Loading...</td>
+                          </tr>
+                            <tr>
+                              <td>5.</td>
+                              <td id="pos_sum5">Loading...</td>
+                            </tr>
+                            </tbody>
+                            </table>
+              </td>
+           <td  style="padding-top: 100px;padding-left: 75px;padding-right: 75px;padding-bottom: 75px;">
 
+            <!-- Card -->
+<div class="card ovf-hidden">
 
-      <div class="col-md-6" id="chartContainer" style="height:400px; width: 400px; position:relative;"></div>
-      <div class="col-md-6" id="chartContainer1" style="height:400px; width: 500px;position: absolute;
-      right: 7%;
-      top: 22%;"></div>
+  <!-- Card content -->
+  <div class="card-body" style="background-color:lightsteelblue">
+    <!-- Title -->
+    <h4 class="card-title">Postive Summary</h4>
+    <hr>
+    <!-- Text -->
+    <p class="card-text" id="summ_pos"></p>
 
-    </div>
   </div>
-  <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-  <script type="text/javascript">
-    window.appConfig = {
-      session_id: {{ id }}
-    }
-    </script>
-    <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
+
+  <!-- Card reveal -->
+  <div class="card-reveal white">
+
+</div>
+<!-- Card -->
+
+    
+           </td>
+          </tr>
+          <tr>
+             
+            <td style="padding: 75px;">
+              <table class="table table-striped" style="table-layout: fixed;text-align: center;">
+                <tbody>
+                  <thead class="thead-inverse" style="text-align: center;">
+                   
+                    <tr>
+                        <th style="padding-left: 120px;">Sr.No.</th>
+                        <th style="padding-left: 100px;">Negative Factors</th>
+                    </tr>
+                  </thead>
+                  <tr>
+                    <td>1.</td>
+                    <td id="neg_sum1">Loading...</td>
+                  </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td id="neg_sum2">Loading...</td>
+                    </tr>
+                      <tr>
+                        <td>3.</td>
+                        <td id="neg_sum3">Loading...</td>
+                      </tr>
+                        <tr>
+                          <td>4.</td>
+                          <td id="neg_sum4">Loading...</td>
+                        </tr>
+                          <tr>
+                            <td>5.</td>
+                            <td id="neg_sum5">Loading...</td>
+                          </tr>
+                          </tbody>
+                          </table>
+
+
+
+            </td>
+            <td style="padding: 75px;">
+
+               <!-- Card -->
+<div class="card ovf-hidden">
+
+  <!-- Card content -->
+  <div class="card-body" style="background-color: lightsteelblue;">
+    <!-- Title -->
+    <h4 class="card-title">Negative Summary</h4>
+    <hr>
+    <!-- Text -->
+    <p class="card-text" id="summ_neg"></p>
+
+  </div>
+
+  <!-- Card reveal -->
+  <div class="card-reveal white">
+
+</div>
+<!-- Card -->
+
+
+
+
+            </td>
+            
+        </tr>
+            
+        </tbody>
+</table>
+
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript">
+  window.appConfig = {
+    session_id: {{ id }}
+  }
+  </script>
+  <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
+  <script src="{{ url_for('static',filename='js/summary.js') }}"></script>
+
+  
+    
   {% endblock%} 
 </body>
 </html>
+
+
+<div class="container" >
+  <div class="row-md-4">
+    <div class="col-md-6" id="chartContainer" style="height:400px; width: 400px;"></div>
+    <div class="col-md-6" id="chartContainer1" style="height:400px; width: 500px;"></div>
+  </div>
+  <div class="row-md-4">
+    <div class="col-md-6" id="dvTable">
+
+    </div>
+
+      <div  class="info col-md-6" style="width: 500px; height: 300px;background-color: #e7f3fe;border-left: 6px solid #2196F3;">
+      <p id= "pos_sum"></p>
+      </div>
+  </div>
+  <div class="row-md-4">
+
+  </div>
+</div>
+
+
+
+
+
+
 
 
 
