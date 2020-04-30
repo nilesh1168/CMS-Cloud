@@ -121,8 +121,12 @@ def summarization(id):
 
 
 
-@app.route('/cert')
-def cert(s_name,session_name,domain,date):
+@app.route('/cert',methods=['GET','POST'])
+def cert():
+    s_name=request.args.get('s_name')
+    session_name=request.args.get('session_name')
+    domain=request.args.get('domain')
+    date=request.args.get('date')
     return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date)
 
 
@@ -147,9 +151,6 @@ def register():
     if form.validate_on_submit():
         admin = Admin(username = form.username.data, email = form.email.data, mobile = form.mobile.data )
         admin.set_password(form.password.data)
-        # msg = Message(subject = 'Welcome to Task Lister',recipients = [form.email.data], body = 'Welcome to Daily Task Lister '+form.username.data+'.\n This mail is to inform that you are successfully registered on Task Lister.\n Thank You!!!!',sender = 'developernil98@gmail.com')
-        # mail.send(msg)
-        # message = client.messages.create(to="+91"+form.mobile.data ,from_="+12509002936",body="Thank You for registering with Daily Task Lister!")
         db.session.add(admin)
         db.session.commit()
         flash("Registered Successfully!!")
@@ -249,7 +250,7 @@ def getFeedback():
         #db.session.commit()
         """ Generate PDF Certificate """ 
         wkhtmltopdf = WKHtmlToPdf('-T 10 -B 10 -O Landscape -s Letter --zoom 1.5')
-        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=feedbackEntity.session.name,domain = feedbackEntity.session.domain ,date =datetime.date.today() ,_external=True), app.config['CERT_PATH']+"cert.pdf")
+        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=feedbackEntity.session.name,domain = feedbackEntity.session.domain ,date =datetime.date.today(),_external=True), app.config['CERT_PATH']+"cert.pdf")
         """Mail the certificate to the participant"""
         msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+feedbackEntity.session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
         with app.open_resource("certificate/cert.pdf") as fp:
