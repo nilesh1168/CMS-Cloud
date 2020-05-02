@@ -92,6 +92,7 @@ $(document).ready(function () {
                         type: "get",
                         url: Flask.url_for('getSession', { "session": response['session'][index][0] }),
                         success: function (response) {
+                            console.log(response)
                             loadData(response)
                         }
                     });

@@ -9,7 +9,7 @@ import datetime
 from POC.entity import feedbackEntity
 import boto3
 from wkhtmltopdfwrapper import WKHtmlToPdf
-
+from threading import Thread
 import string
 from collections import Counter
 from nltk.corpus import stopwords
@@ -21,6 +21,11 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 
 comprehend = client = boto3.client('comprehend')
+
+def send_async_email(msg):
+    with app.app_context():
+        mail.send(msg)
+
 
 def calcAnswers(responses):
     questions = {'Q1':{'YES':0,'NO':0},'Q2':{'YES':0,'NO':0},'Q3':{'YES':0,'NO':0},'Q4':{'YES':0,'NO':0},'Q5':{'YES':0,'NO':0}}
@@ -134,7 +139,7 @@ def cert():
 def start():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    return render_template("start.html")    
+    return render_template("start.html",title = "Home")    
 
 
 @app.route("/dashboard",methods = ['GET','POST'])
@@ -194,7 +199,7 @@ def schedule():
             db.session.commit()
             flash("Session created Successfully!!")
             return redirect(url_for('getSessions'))
-    return render_template("createsession.html", title = "Schedule", form = form)
+    return render_template("createsession.html", title = "Schedule Session", form = form)
 
 @app.route("/feedback",methods = ['GET'])
 def start_session():
@@ -255,8 +260,8 @@ def getFeedback():
         msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+feedbackEntity.session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
         with app.open_resource("certificate/cert.pdf") as fp:
             msg.attach("certificate.pdf",content_type="application/pdf", data=fp.read())
-        mail.send(msg)
-
+        thr = Thread(target=send_async_email, args=[msg])
+        thr.start()
         return render_template('success.html')
     return render_template("feedbackform.html",form=form)    
 
@@ -266,7 +271,7 @@ def getStudents():
     """To view all the Student attendees"""
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).subquery()
     students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
-    return render_template("students.html",students = students)#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+    return render_template("students.html",students = students,title="Attendees")#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
 
 
 @app.route("/getCity",methods=['GET'])
@@ -280,21 +285,16 @@ def getCity():
 @app.route("/getSession",methods=['GET'])
 def getSession():
     session = request.args.get('session',"",type = str)
-    page = request.args.get('page', 1,type = int)
     query = db.session.query(Feedback.mobile, Feedback.description, Session.name).filter(Feedback.session == Session.s_id).filter(Session.name == session).subquery()
-    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).paginate(page,app.config['ENTRIES_PER_PAGE'],False)
-    pages = students.pages
-    cur_page = students.page
-    next_url = url_for('getStudents', page=students.next_num) if students.has_next else None
-    prev_url = url_for('getStudents', page=students.prev_num) if students.has_prev else None
-    return { 'students':students.items , 'pages': pages, 'cur_page':cur_page ,"next_url": next_url ,"prev_url": prev_url}
+    students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
+    return { 'students':students }
 
 
 @app.route('/report/<s_id>',methods=['GET','POST'])
 def genReport(s_id):
     response = Response.query.filter_by(session=s_id).first()
     session = Session.query.filter_by(s_id=s_id).first()
-    return render_template("chart.html",id=response.session,name=session.name,title="Prudent")
+    return render_template("chart.html",id=response.session,name=session.name,title="Report")
     
 
 @app.route('/getReport',methods=['GET','POST'])
