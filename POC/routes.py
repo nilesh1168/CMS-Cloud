@@ -195,10 +195,10 @@ def schedule():
     if request.method == 'POST':
         if form.validate_on_submit():
             session = Session(name = form.session_name.data ,domain = form.session_domain.data ,scheduled_on= form.session_date.data)
-            db.session.add(session)
-            db.session.commit()
-            flash("Session created Successfully!!")
-            return redirect(url_for('getSessions'))
+            db.session.add(session)    
+            # db.session.commit()
+            # flash("Session created Successfully!!")
+            # return redirect(url_for('getSessions'))
     return render_template("createsession.html", title = "Schedule Session", form = form)
 
 @app.route("/feedback",methods = ['GET'])
