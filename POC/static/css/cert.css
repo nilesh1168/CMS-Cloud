@@ -1,9 +1,9 @@
 div#cert-footer {
     position: absolute;
-    width: 60%;
-    top: 480px;
-    text-align: center;
-    margin: 30px 20px;
+    width: 100%;
+    margin-top: 50px;
+    /* text-align: center; */
+    margin-left: 40px;
   }
   
   #cert-stamp, #cert-ceo-sign {
@@ -12,7 +12,7 @@ div#cert-footer {
     
   }
   
-  div#cert-issued-by, div#cert-ceo-design {
+div#cert-issued-by, div#cert-ceo-design {
     width: 40%;
     display: inline-block;
     float: left;  
@@ -43,7 +43,8 @@ div#cert-footer {
     position: absolute;
     left: 30px;
     top: 30px;
-    margin: 20px 150px;
+    /* margin: 20px 150px; */
+    text-align: center;
   }
   
   p {
@@ -52,18 +53,10 @@ div#cert-footer {
     margin: 20px 50px;
   }
   
-  
-  html {
-    display: inline-block;
-    width: 1024px;
-    height: 768px;
-    background: #eee url("cert1.jpg") no-repeat; background-size: 100%;
-  }
-  
   h1#cert-holder {
     font-size: 50px;
     color: #be2d24;
-    margin: 30px 100px
+    margin: 40px 100px
   }
   
   p.smaller {
@@ -77,8 +70,9 @@ div#cert-footer {
   
   } 
   
-  div#cert-desc {
-    width: 70%;
+div#cert-desc {
+    width: 100%;
+    /* text-align: center; */
   }
   
   p#cert-from {

@@ -30,7 +30,8 @@ class Admin(db.Model,UserMixin):
 class Question(db.Model):
     __tablename__='Question_Table'
     q_id = db.Column(db.Integer(),primary_key=True)
-    question = db.Column(db.String(100))
+    question = db.Column(db.String(750))
+    s_id = db.Column('session_id',db.Integer(),db.ForeignKey('Session.s_id'))
 
     def __repr__(self):
         return 'Question : {}'.format(self.question) 
@@ -46,7 +47,8 @@ class Session(db.Model):
     name = db.Column(db.String(30))
     domain = db.Column(db.String(20))
     scheduled_on = db.Column(db.DateTime(),nullable=False)
-
+    cert = db.Column(db.String(150),nullable=False)
+    
     def __repr__(self):
         return 'Domain : {}'.format(self.domain)
 

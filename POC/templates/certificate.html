@@ -1,68 +1,64 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="{{ url_for('static',filename='css/cert.css') }}">
-        <!-- <style> @page { size: letter landscape; margin: 2cm; } </style> -->
+
+<head>
+
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/cert.css') }}">
+  <style>
+    html{
+      background: #eee url({{ url_for('static',filename='img/certificate/'+cert) }}) no-repeat;
+      display: inline-block;
+      width: 1024px;
+      height: 768px; 
+      background-size: 100%;
+    }
+  </style>
 </head>
+
 <body>
-<br><br><br><br>
-<br><br><br><br>
+  <br><br><br><br>
+  <br><br><br><br>
 
-<p class="smaller" id="cert-declaration">
-          THIS IS TO CERTIFY THAT
-</p>
+  <p class="smaller" id="cert-declaration">
+    THIS IS TO CERTIFY THAT
+  </p>
 
-<h1 id="cert-holder">
-  {{ s_name }}
-</h1>
+  <h1 id="cert-holder">
+    {{ s_name }}
+  </h1>
 
-<p class="smaller" id='cert-completed-line'>
-  has successfully completed the
-</p>
+  <p class="smaller" id='cert-completed-line'>
+    has successfully completed the
+  </p>
 
-<h2 id="cert-course">
-  {{ session_name }}
-</h2>
+  <h2 id="cert-course">
+    {{ session_name }}
+  </h2>
 
-<div id="cert-desc">
-  <p  id='cert-details'>
-<center>
-    which includes the knowledge of {{ domain }}.
-    </center>
-    </p>
-</div>
-
-
-<p id="cert-from" class="smaller">
- from www.companywebsite.com
-</p>
-
-<p class="text" id='cert-issued'>
- <b>Issued on:</b> {{ date }}.
-</p>
-
-<div id="cert-footer">
-  <div id="cert-issued-by">
-  
-    <img id="cert-stamp" src="https://i7.pngguru.com/preview/585/794/452/paper-rubber-stamp-postage-stamps-company-seal-seal-thumbnail.jpg">
-
-   
-    <p>Issued by THE COMPANY S.L.</p>
-   
+  <div id="cert-desc">
+        <p>which includes the knowledge of {{ domain }}. </p> 
   </div>
-  <div id="cert-ceo-design">
-    
-    <img id="cert-ceo-sign" src="https://i7.pngguru.com/preview/585/794/452/paper-rubber-stamp-postage-stamps-company-seal-seal-thumbnail.jpg">
 
- 
-    <p>Company Ceo CEO of The Company</p>
-    
-  </div>
-</div>
 
-<div id="cert-verify">
-    Verify at companywebsite.ai/verify/XYZ12ER56129F. <br> 
-    Company has confirmed the participation of this individual in the course.
+  <p id="cert-from" class="smaller">
+    from www.companywebsite.com
+  </p>
+
+  <p style="text-align: left;">
+    <b>Issued on:</b> {{ date }}
+  </p>
+
+  <div id="cert-footer">
+    <div id="cert-issued-by">
+
+      <p>Issued by THE COMPANY S.L.</p>
+
+    </div>
+    <div id="cert-ceo-design">
+
+      <p>Company Ceo CEO of The Company</p>
+
+    </div>
   </div>
 </body>
-</html>
 
+</html>

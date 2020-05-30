@@ -1,16 +1,14 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory , redirect, url_for, flash, get_flashed_messages, make_response
-from POC.forms import FeedbackForm, LoginForm, RegistrationForm, ArrangeSessionForm
+from POC.forms import FeedbackForm, LoginForm, RegistrationForm, ArrangeSessionForm, QuestionForm
 from flask_login import current_user, login_user , logout_user, login_required, user_logged_in
 from flask_mail import Message, Attachment
 from POC import app,db,mail
-from POC.models import Admin, Session, StudInfo, Response, Feedback
+from POC.models import Admin, Session, StudInfo, Response, Feedback, Question
 from werkzeug.urls import url_parse
-import datetime
+import datetime,string,json,boto3,os
 from POC.entity import feedbackEntity
-import boto3
 from wkhtmltopdfwrapper import WKHtmlToPdf
 from threading import Thread
-import string
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -19,6 +17,7 @@ import sumy
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
+from .config import base_dir
 
 comprehend = client = boto3.client('comprehend')
 
@@ -132,7 +131,9 @@ def cert():
     session_name=request.args.get('session_name')
     domain=request.args.get('domain')
     date=request.args.get('date')
-    return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date)
+    cert = request.args.get('cert')
+    print(cert)
+    return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date,cert=cert)
 
 
 @app.route("/",methods = ['GET'])
@@ -186,20 +187,46 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+@app.route("/arrange",methods=['POST'])
+def arrange():
+    adata = json.loads(request.args.get('adata'))
+    qdata = json.loads(request.args.get('qdata'))
+    cert = request.args.get('cert')
+    session = Session(name = adata['session_name'] ,domain = adata['session_domain'] ,scheduled_on= adata['session_date'].replace("T"," "), cert=cert)
+    #db.session.add(session)
+    #db.session.commit()
+    objects = [
+        Question(question= qdata['Q1'], s_id= session.s_id),
+        Question(question= qdata['Q2'], s_id= session.s_id),
+        Question(question= qdata['Q3'], s_id= session.s_id),
+        Question(question= qdata['Q4'], s_id= session.s_id),
+        Question(question= qdata['Q5'], s_id= session.s_id),
+    ]
+    #db.session.bulk_save_objects(objects)
+    #db.session.commit()
+    #return str(session.s_id)
+    flash("Session created Successfully!!")
+    return '5'
 
-@app.route("/schedule",methods=['GET','POST'])
+
+@app.route("/schedule",methods=['GET'])
 @login_required
 def schedule():
     """To arrange sessions"""
-    form = ArrangeSessionForm()
-    if request.method == 'POST':
-        if form.validate_on_submit():
-            session = Session(name = form.session_name.data ,domain = form.session_domain.data ,scheduled_on= form.session_date.data)
-            db.session.add(session)    
-            # db.session.commit()
-            # flash("Session created Successfully!!")
-            # return redirect(url_for('getSessions'))
-    return render_template("createsession.html", title = "Schedule Session", form = form)
+    arrangeform = ArrangeSessionForm()
+    questionform = QuestionForm()
+    CERT_SYSTEM = base_dir+url_for('static',filename='img/certificate')
+    itemList = os.listdir(CERT_SYSTEM)
+    # if request.method == 'POST':
+    #     print("asjv")
+    #     if arrangeform.validate_on_submit() and arrangeform.arrange.data:
+    #         print("idk")
+    #         session = Session(name = arrangeform.session_name.data ,domain = arrangeform.session_domain.data ,scheduled_on= arrangeformform.session_date.data)
+    #         db.session.add(session)    
+    #         db.session.commit()
+    #         flash("Session created Successfully!!")
+    #         return redirect(url_for('getSessions'))
+    return render_template("createsession.html", title = "Schedule Session", arrangeform = arrangeform, qform=questionform, itemList=itemList,CERT_SYSTEM = CERT_SYSTEM)
 
 @app.route("/feedback",methods = ['GET'])
 def start_session():
@@ -215,7 +242,10 @@ def start_session():
             l.append(dateTimeDifferenceInHours)
     a = min(l)
     print("inside /feedback",t[l.index(a)].domain)
-    return render_template("welcome.html",session = t[l.index(a)].domain)
+    q = Question.query.filter_by(s_id=t[l.index(a)].s_id).all()
+    print(len(q))
+    print(q)
+    return render_template("welcome.html",session = t[l.index(a)].domain,question=q)
 
 @app.route("/feedback_form",methods=['GET'])
 def feedback_form():
@@ -253,9 +283,10 @@ def getFeedback():
         feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
         #db.session.commit()
-        """ Generate PDF Certificate """ 
+        """ Generate PDF Certificate """
+        cert = Session.query.filter_by(s_id=feedbackEntity.session.s_id).first().cert 
         wkhtmltopdf = WKHtmlToPdf('-T 10 -B 10 -O Landscape -s Letter --zoom 1.5')
-        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=feedbackEntity.session.name,domain = feedbackEntity.session.domain ,date =datetime.date.today(),_external=True), app.config['CERT_PATH']+"cert.pdf")
+        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=feedbackEntity.session.name,domain = feedbackEntity.session.domain ,date =datetime.date.today(),cert=cert,_external=True), app.config['CERT_PATH']+"cert.pdf")
         """Mail the certificate to the participant"""
         msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+feedbackEntity.session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
         with app.open_resource("certificate/cert.pdf") as fp:
@@ -321,6 +352,8 @@ def getSessions():
 @app.route("/delsession",methods=['GET','POST'])
 def del_Session():
     """To delete arranged sessions"""
+    # q = Question.query.filter_by(s_id = request.args.get('s_id')).all()
+    # db.session.delete(q) 
     s = Session.query.filter_by(s_id = request.args.get('s_id')).first()
     db.session.delete(s)
     db.session.commit()

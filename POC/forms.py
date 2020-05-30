@@ -31,6 +31,12 @@ class ArrangeSessionForm(FlaskForm):
     session_domain = StringField("Domain of Session",validators=[DataRequired("Domain Required!!!")])
     session_date = DateTimeLocalField("Date and Time to be Conducted",format='%Y-%m-%dT%H:%M',validators=[DataRequired("Date Required"),])
     #session_time = StringField("Time to be Conducted",validators=[DataRequired("Date Required"),],render_kw={"placeholder": "HHMMSS"})
-    submit = SubmitField("Proceed")
 
+
+class QuestionForm(FlaskForm):
+    Q1 = StringField("Question 1",validators=[DataRequired("Question Required!!!")])
+    Q2 = StringField("Question 2",validators=[DataRequired("Question Required!!!")])     
+    Q3 = StringField("Question 3",validators=[DataRequired("Question Required!!!")])     
+    Q4 = StringField("Question 4",validators=[DataRequired("Question Required!!!")])     
+    Q5 = StringField("Question 5",validators=[DataRequired("Question Required!!!")])     
      

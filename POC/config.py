@@ -16,8 +16,8 @@ class Config():
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT =  465
     MAIL_USE_SSL = True
-    MAIL_USERNAME = os.getenv('EMAIL')
-    MAIL_PASSWORD = os.getenv('PWD')
+    MAIL_USERNAME = 'developernil98@gmail.com'#os.getenv('EMAIL')
+    MAIL_PASSWORD = 'dattaraj@8101998'#os.getenv('PWD')
     CERT_PATH = base_dir+'/certificate/'
 
 class TestConfig(Config):
@@ -29,4 +29,4 @@ class TestConfig(Config):
     # Since we want our unit tests to run quickly
     # we turn this down - the hashing is still done
     # but the time-consuming part is left out.
-    HASH_ROUNDS = 1
+    HASH_ROUNDS = 1    
