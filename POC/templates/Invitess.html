@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block title %} {{ title }} {% endblock %}
+</head>
+
+<body>
+    {% block page_content %}
+    <script src="{{ url_for('static',filename='js/jPages.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/jPages.css') }}">
+    <script src="{{ url_for('static',filename='js/sendinvites.js') }}"></script>
+    <script>function toggle(source) {
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] != source)
+                    checkboxes[i].checked = source.checked;
+            }
+        }
+
+        function printChecked() {
+
+            var items = document.getElementsByName("email");
+            var selectedItems = "";
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].type == 'checkbox' && items[i].checked == true)
+                    selectedItems += items[i].value + "\n";
+            }
+            alert(selectedItems);
+        }
+
+        /*function hide_function() {
+        var x = document.getElementById("hidethis");
+        if (x.style.display === "none") {
+             x.style.display = "block";
+            } else {
+        x.style.display = "none";
+            }
+        }*/
+
+        
+
+    </script>
+    <div id="hidethis" >
+        <h3 class="text-center text-dark">Invite List</h3>
+        <div class="container">
+            Filters
+            <ul id="filter" class="nav nav-tabs">
+                <li><a id="AOI" data-toggle="tab" href="#menu3">Area Of Interest</a></li>
+                <li><a id="Domain" data-toggle="tab" href="#menu4">Session</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="menu3" class="tab-pane fade">
+                    <ul class="nav nav-pills">
+                    </ul>
+                </div>
+                <div id="menu4" class="tab-pane fade">
+                    <ul class="nav nav-pills">
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div class="text-right" style="padding-top:20px ; padding-bottom:20px ;">
+            <input id="myInput" type="text" placeholder="Search..">
+        </div>
+
+        <table class="table table-hover">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Area of Interest</th>
+                    <th>Session</th>
+                </tr>
+            </thead>
+
+            <tbody id="itemContainer">
+                <input type="checkbox" onclick="toggle(this);" />Select All<br />
+                {% for stud in students %}
+                <tr>
+
+                    <td><input type="checkbox" name="email" value={{stud[0]}}>{{ stud[0] }}</td>
+                    <td>{{ stud[1] }}</td>
+                    <td>{{ stud[2] }}</td>
+                    <td>{{ stud[3] }}</td>
+
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+        <hr>
+        <div class="container-fluid text-center">
+            <div class="holder">
+
+            </div>
+        </div>
+        <hr>
+
+    </div>
+
+    <div  id="upcoming_session" class="container-fluid">
+        <h3 class="text-center text-dark my-4">Send Invites for Upcoming Sessions</h3>
+        {% if sessions %}
+        <table class="table table-hover">
+          <thead class="thead-inverse">
+              <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Domain</th>
+                  <th>Scheduled On</th>
+              </tr>
+          </thead>
+              <tbody>
+                
+                {% for session in sessions %}
+                <tr>
+                  <td>{{ session.s_id }}</td>
+                  <td>{{ session.name }}</td>
+                  <td>{{ session.domain }}</td>
+                  <td>{{ session.scheduled_on }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+      </table>
+      {% else %}
+        <div class="container"><p class="text-center">No Sessions!!</p></div>
+      {% endif %}
+      </div>
+    
+
+      
+    
+    <div class="row">
+        <div class="col-sm-4"></div>
+        
+        <div class="col-md-4">
+            <input type="button" onclick='printChecked()' value="Send Invites" /> 
+        </div>
+        <div class="col-md-4"></div>
+      </div>
+
+    {% endblock %}
+</body>
+
+</html>
