@@ -6,6 +6,8 @@ from POC import app,db,mail
 from POC.models import Admin, Session, StudInfo, Response, Feedback, Question
 from werkzeug.urls import url_parse
 import datetime,string,json,boto3,os
+from datetime import timedelta
+from dateutil.relativedelta import *
 from POC.entity import feedbackEntity
 from wkhtmltopdfwrapper import WKHtmlToPdf
 from threading import Thread
@@ -320,6 +322,26 @@ def getSession():
     students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
     return { 'students':students }
 
+@app.route("/getSession_invite",methods=['GET'])
+def getSession_invite():
+    date = datetime.datetime.now()
+    date = date + relativedelta(months=-6)
+    session = request.args.get('session',"",type = str)
+    query = db.session.query(Feedback.mobile, Feedback.areaofinterest, Session.name).filter(Feedback.session == Session.s_id).filter(Session.name == session).filter(Session.scheduled_on > date).subquery()
+    students = db.session.query( StudInfo.email ,StudInfo.name,  query.c.areaofinterest, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
+    return { 'students':students }
+
+@app.route("/getAOI_invite",methods=['GET'])
+def getAOI_invite():
+    date = datetime.datetime.now()
+    date = date + relativedelta(months=-6)
+    areaOI = request.args.get('areaOI')
+    print(areaOI)
+    query = db.session.query(Feedback.mobile, Feedback.areaofinterest, Session.name).filter(Feedback.session == Session.s_id).filter(Session.scheduled_on > date).subquery()
+    students = db.session.query(StudInfo.email , StudInfo.name , query.c.areaofinterest, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(query.c.areaofinterest== areaOI).order_by(StudInfo.name).all()
+    return { 'students':students }
+    
+
 
 @app.route('/report/<s_id>',methods=['GET','POST'])
 def genReport(s_id):
@@ -386,10 +408,16 @@ def getAOI():
 
 
 @app.route("/filter",methods=['GET'])
-def filter():
+def filter():	
     city = db.session.query(StudInfo.city).distinct().all()
     ses = db.session.query(Session.name).distinct().all()
-    return {'city': city,'session':ses }    
+    return {'city': city,'session':ses}   
+    
+@app.route("/filter_invite",methods=['GET'])
+def filter_invites():
+    areaOI=db.session.query(Feedback.areaofinterest).distinct().all()	
+    ses = db.session.query(Session.name).distinct().all()
+    return {'areaOI':areaOI,'session':ses} 
 
 @app.route("/send_invites",methods=['GET','POST'])
 def sendInvites():
@@ -397,6 +425,18 @@ def sendInvites():
     if request.method == 'POST':
         pass
     return render_template("sendinvites.html",sessions=sessions)
+
+
+@app.route("/invites",methods=['GET','POST'])
+def Invites():
+    # apply filter of date(6 months)
+    date = datetime.datetime.now()
+    date = date + relativedelta(months=-6)
+    query = db.session.query(Feedback.mobile, Feedback.areaofinterest, Session.name).filter(Feedback.session == Session.s_id).filter(Session.scheduled_on > date).subquery()
+    students = db.session.query(StudInfo.email,StudInfo.name , query.c.areaofinterest,query.c.name).filter(StudInfo.mobile== query.c.mobile).order_by(StudInfo.name).all()
+    
+    return render_template("Invitess.html",students=students,title="Invites")#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+   
 
 @app.route("/service-worker.js",methods = ['GET','POST'])
 def load_service():
