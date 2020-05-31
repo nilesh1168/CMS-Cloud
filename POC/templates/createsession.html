@@ -2,13 +2,15 @@
 {% import "bootstrap/wtf.html" as wtf %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
+
     {% block title %} {{ title }} {% endblock %}
 </head>
+
 <body>
     {% block page_content %}
     <div class="container-fluid">
@@ -16,22 +18,66 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-4">
-                {% if sessions %}
-                <form method="post">
-                    {{ form.hidden_tag() }}
-                    <h3 class="text-center">Edit Session</h3>
-                    {{ wtf.form_field(form.session_name,value=sessions.name) }}
-                    {{ wtf.form_field(form.session_domain,value=sessions.domain) }}
-                    {{ wtf.form_field( form.session_date,value=sessions.scheduled_on.strftime('%Y-%m-%dT%H:%M')) }}
-                    {{ wtf.form_field(form.submit) }}
-                </form>  
-                {% else %}
-                <h3 class="text-center">Schedule Session</h3>
-                {{ wtf.quick_form(form) }}
-                {% endif %}
+                <div id="arrange-form">
+                    {% if sessions %}
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+                        <h3 class="text-center">Edit Session</h3>
+                        {{ wtf.form_field(form.session_name,value=sessions.name) }}
+                        {{ wtf.form_field(form.session_domain,value=sessions.domain) }}
+                        {{ wtf.form_field( form.session_date,value=sessions.scheduled_on.strftime('%Y-%m-%dT%H:%M')) }}
+                        {{ wtf.form_field(form.submit) }}
+                    </form>
+                    {% else %}
+                    <h3 class="text-center">Schedule Session</h3>
+                    <form name="arrangeform" id="arrangeform" method="post">
+                        {{ arrangeform.hidden_tag() }}
+                        {{ wtf.form_field(arrangeform.session_name) }}
+                        {{ wtf.form_field(arrangeform.session_domain) }}
+                        {{ wtf.form_field( arrangeform.session_date) }}
+                        <button id="aproceed" type="button" class="btn btn-primary">Proceed</button>
+                    </form>
+                    {% endif %}
+                </div>
+                <div id="questions-from">
+                    <form name="qform" id="qform" method="post">
+                        {{ qform.hidden_tag() }}
+                        <h3 class="text-center">Set Questions</h3>
+                        {{ wtf.form_field(qform.Q1) }}
+                        {{ wtf.form_field(qform.Q2) }}
+                        {{ wtf.form_field( qform.Q3) }}
+                        {{ wtf.form_field( qform.Q4) }}
+                        {{ wtf.form_field( qform.Q5) }}
+                        <button id="qproceed" type="button" class="btn btn-primary">Proceed</button>
+                        <button id="qback" type="button" class="btn btn-primary">Back</button>
+                    </form>
+                </div>
+                <div class="container-fluid text-center" id="js-error" style="color: red; padding-top: 10pt;"></div>
+            </div>
             <div class="col-md-4"> </div>
         </div>
-    </div>    
+        <div class="row">
+            <div class="col-md-4">
+                <div id="image-sel">
+                    Images
+                    <form id='image-sel-form'>
+                        {% for item in itemList %}
+                        <li type="none">
+                            <input type="radio" id="{{ item }}" name="cert" value="{{ item }}">
+                            <label for="{{ item }}">{{ item }}</label>
+                        </li>
+                        {% endfor %}
+                        <button id = "submit-btn" type="button" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-8" id="preview"></div>
+        </div>
+    </div>
+    <script src="{{ url_for('static',filename='js/formToJson.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/formToJson.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/createsession.js') }}"></script>
     {% endblock %}
 </body>
+
 </html>

@@ -39,7 +39,7 @@ const showLocalNotification = (title, body, tag, swRegistration) => {
 async function Q1(swRegistration){
   return new Promise((resolve)=>{
     setTimeout(() => {
-      resolve(showLocalNotification('Question 1', 'Is the venue easily accessible?',1, swRegistration));
+      resolve(showLocalNotification('Question 1', appConfig.q1 ,1, swRegistration));
     }, 3000);
   });
 }
@@ -47,7 +47,7 @@ async function Q1(swRegistration){
 async function Q2(swRegistration){
   return new Promise((resolve)=>{
     setTimeout(() => {
-      resolve(showLocalNotification('Question 2', 'Is the Session Interactive?',2, swRegistration));
+      resolve(showLocalNotification('Question 2', appConfig.q2 ,2, swRegistration));
     }, 6000);
   });
 }
@@ -55,7 +55,7 @@ async function Q2(swRegistration){
 async function Q3(swRegistration){
   return new Promise((resolve)=>{
     setTimeout(() => {
-      resolve(showLocalNotification('Question 3', 'Does the Instructor demonstrate adequate knowledge of topic?',3, swRegistration));
+      resolve(showLocalNotification('Question 3', appConfig.q3 ,3, swRegistration));
     }, 9000);
   });
 }
@@ -63,7 +63,7 @@ async function Q3(swRegistration){
 async function Q4(swRegistration){
   return new Promise((resolve)=>{
     setTimeout(() => {
-      resolve(showLocalNotification('Question 4', 'Was the Seminar relevant to the topic?',4, swRegistration));
+      resolve(showLocalNotification('Question 4',appConfig.q4 ,4, swRegistration));
     }, 12000);
   });
 }
@@ -71,7 +71,7 @@ async function Q4(swRegistration){
 async function Q5(swRegistration){
   return new Promise((resolve)=>{
     setTimeout(() => {
-      resolve(showLocalNotification('Question 5', 'Are you likely to participate in our future seminar sessions?',5, swRegistration));
+      resolve(showLocalNotification('Question 5', appConfig.q5 ,5, swRegistration));
     }, 15000);
   });
 }
