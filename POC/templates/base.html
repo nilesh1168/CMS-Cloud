@@ -62,7 +62,11 @@
                 </li>
                 <li>
 
+<<<<<<< HEAD
+                    <a href="{{ url_for('Invitess') }}" data-toggle="tooltip" data-placement="right"
+=======
                     <a href="{{ url_for('Invites') }}" data-toggle="tooltip" data-placement="right"
+>>>>>>> 7a8954e41004b681781056842a842a5398a65eb0
                         title="Send Invites"><span class="fa-stack fa-lg pull-left"><i
                                 class="fas fa-mail-bulk fa-stack-1x"></i></span>Send Invites</a>
                 </li>
@@ -81,6 +85,14 @@
                         title="Show Attendees"><span class="fa-stack fa-lg pull-left"><i
                                 class="fas fa-user fa-stack-1x "></i></span>Show Attendees</a>
                 </li>
+                {% if current_user.mobile==9850927568 %}
+                <li>
+                    <a href="{{ url_for('getUsers') }}" data-toggle="tooltip" data-placement="right"
+                        title="Manage Users"><span class="fa-stack fa-lg pull-left"><i
+                                class="fas fa-user fa-stack-1x "></i></span>Manage Users</a>
+                </li>
+                {% endif %}
+                
                 <li>
                     <a href="{{ url_for('logout') }}" data-toggle="tooltip" data-placement="right" title="Logout"><span
                             class="fa-stack fa-lg pull-left"><i

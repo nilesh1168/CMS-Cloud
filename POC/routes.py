@@ -406,6 +406,23 @@ def getAOI():
     print(d)
     return d
 
+    @app.route("/users",methods=['GET','POST'])
+def getUsers():
+    """To view users"""
+    users= Admin.query.paginate(1,app.config['ENTRIES_PER_PAGE'],False)
+    return render_template("users.html",title='Users',users = users.items)
+
+@app.route("/deluser",methods=['GET','POST'])
+def del_User():
+    """To delete User"""
+    u = Admin.query.filter_by(mobile = request.args.get('mobile')).first()
+    print(u)
+    db.session.delete(u)
+    db.session.commit()
+    flash("User Deleted!!")
+    l = get_flashed_messages()
+    return l[0]
+
 
 @app.route("/filter",methods=['GET'])
 def filter():	

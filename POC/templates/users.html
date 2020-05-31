@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {% block title %} {{ title }} {% endblock %}
+</head>
+<body>
+    {% block page_content %}
+    <div class="container-fluid">
+        <h3 class="text-center text-dark my-4">Users</h3>
+        <table class="table table-hover">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Mobile no</th>
+                    <th>Password</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr id = "{{ user.mobile }}">
+                        <td scope="row">{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.mobile }}</td>
+                        <td>{{ user.password_hash }}</td>
+                        <td><a onclick="del({{ user.mobile }})"><i style="cursor:pointer" class="fa fa-trash"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+    </div>
+    <script>
+        
+        function del(mobile){
+            $.ajax({
+                type: "post",
+                url: Flask.url_for('del_User',{'mobile':mobile}),
+                success: function (response) {
+                    $('#'+mobile).hide();
+                    console.log(response);
+                    
+                }
+            });
+        }
+    </script>  
+    {% endblock %}
+</body>
+</html>
