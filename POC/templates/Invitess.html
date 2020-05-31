@@ -16,41 +16,12 @@
     <script src="{{ url_for('static',filename='js/jPages.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/jPages.css') }}">
     <script src="{{ url_for('static',filename='js/sendinvites.js') }}"></script>
-    <script>function toggle(source) {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            for (var i = 0; i < checkboxes.length; i++) {
-                if (checkboxes[i] != source)
-                    checkboxes[i].checked = source.checked;
-            }
-        }
-
-        function printChecked() {
-
-            var items = document.getElementsByName("email");
-            var selectedItems = "";
-            for (var i = 0; i < items.length; i++) {
-                if (items[i].type == 'checkbox' && items[i].checked == true)
-                    selectedItems += items[i].value + "\n";
-            }
-            alert(selectedItems);
-        }
-
-        /*function hide_function() {
-        var x = document.getElementById("hidethis");
-        if (x.style.display === "none") {
-             x.style.display = "block";
-            } else {
-        x.style.display = "none";
-            }
-        }*/
-
-        
-
-    </script>
-        <div  id="upcoming_session" class="container-fluid">
+    
+    <div  id="upcoming_session" class="container-fluid">
             <h3 class="text-center text-dark my-4">Send Invites for Upcoming Sessions</h3>
             {% if sessions %}
-            <table class="table table-hover">
+            <br>
+            <table class="table table-hover" id="sessionTable">
               <thead class="thead-inverse">
                   <tr>
                       <th>ID</th>
@@ -63,7 +34,7 @@
                     
                     {% for session in sessions %}
                     <tr>
-                      <td>{{ session.s_id }}</td>
+                      <td ><input class="idcheck" type="checkbox" name="sid" value={{session.s_id}}>{{ session.s_id }}</td>
                       <td>{{ session.name }}</td>
                       <td>{{ session.domain }}</td>
                       <td>{{ session.scheduled_on }}</td>
@@ -75,7 +46,8 @@
             <div class="container"><p class="text-center">No Sessions!!</p></div>
           {% endif %}
           <hr>
-          </div>    
+          </div>  
+            
 
     <div id="hidethis" >
         <h3 class="text-center text-dark">Invite List</h3>

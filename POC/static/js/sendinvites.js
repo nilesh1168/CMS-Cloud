@@ -36,6 +36,61 @@ function loadData(response) {
     });
 }
 
+function toggle(source) {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i] != source)
+            checkboxes[i].checked = source.checked;
+    }
+}
+
+window.onload = function () {
+    var upcoming_session = document.getElementById("sessionTable");
+    var chks = upcoming_session.getElementsByTagName("INPUT");
+    for (var i = 0; i < chks.length; i++) {
+        chks[i].onclick = function () {
+            for (var i = 0; i < chks.length; i++) {
+                if (chks[i] != this && this.checked) {
+                    chks[i].checked = false;
+                }
+            }
+        };
+    }
+};
+
+function printChecked(checkbox) {
+
+    var items = document.getElementsByName("email");
+    var selectedItems = [];
+    for (var i = 0; i < items.length; i++) {
+        if (items[i].type == 'checkbox' && items[i].checked == true)
+            selectedItems.push(items[i].value);
+    }
+
+    
+    
+    
+    var id_items = document.getElementsByName("sid");
+    var selectedID = [];
+    for (var i = 0; i < id_items.length; i++) {
+        if (id_items[i].type == 'checkbox' && id_items[i].checked == true)
+            selectedID.push(id_items[i].value);
+    }
+   
+    
+
+    $.ajax({
+        type:"get",
+        url: Flask.url_for("sendEmail_invites",{ 'mail': selectedItems ,'session_id' : selectedID }),
+        
+        success: function (response) {
+            
+        alert(response);
+        }
+    })
+    //alert(selectedItems);
+}
+
 $(document).ready(function () {
     /* initiate the plugin */
     $("div.holder").jPages({
@@ -46,7 +101,10 @@ $(document).ready(function () {
         midRange: 5,
         endRange: 1
     });
-    console.log("hello");
+    
+    
+
+
     $.ajax({
         type: "get",
         url: Flask.url_for("filter_invites"),
