@@ -18,7 +18,6 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Mobile no</th>
-                    <th>Password</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,7 +26,6 @@
                         <td scope="row">{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.mobile }}</td>
-                        <td>{{ user.password_hash }}</td>
                         <td><a onclick="del({{ user.mobile }})"><i style="cursor:pointer" class="fa fa-trash"></i></a></td>
                     </tr>
                     {% endfor %}

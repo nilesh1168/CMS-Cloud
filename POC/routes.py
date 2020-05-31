@@ -406,7 +406,7 @@ def getAOI():
     print(d)
     return d
 
-    @app.route("/users",methods=['GET','POST'])
+@app.route("/users",methods=['GET','POST'])
 def getUsers():
     """To view users"""
     users= Admin.query.paginate(1,app.config['ENTRIES_PER_PAGE'],False)
