@@ -195,8 +195,8 @@ def arrange():
     qdata = json.loads(request.args.get('qdata'))
     cert = request.args.get('cert')
     session = Session(name = adata['session_name'] ,domain = adata['session_domain'] ,scheduled_on= adata['session_date'].replace("T"," "), cert=cert)
-    #db.session.add(session)
-    #db.session.commit()
+    db.session.add(session)
+    db.session.commit()
     objects = [
         Question(question= qdata['Q1'], s_id= session.s_id),
         Question(question= qdata['Q2'], s_id= session.s_id),
@@ -204,11 +204,11 @@ def arrange():
         Question(question= qdata['Q4'], s_id= session.s_id),
         Question(question= qdata['Q5'], s_id= session.s_id),
     ]
-    #db.session.bulk_save_objects(objects)
-    #db.session.commit()
-    #return str(session.s_id)
+    db.session.bulk_save_objects(objects)
+    db.session.commit()
     flash("Session created Successfully!!")
-    return '5'
+    return str(session.s_id)
+    # return '5'
 
 
 @app.route("/schedule",methods=['GET'])
@@ -277,14 +277,14 @@ def getFeedback():
         stud.session.append(feedbackEntity.session)
         db.session.add(stud)
         db.session.add(res)
-        #db.session.commit()
+        db.session.commit()
         """Add Feedback
             API call for sentiment  
         """
         sentiment = comprehend.detect_sentiment(Text=form.feedback.data, LanguageCode='en')
         feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
-        #db.session.commit()
+        db.session.commit()
         """ Generate PDF Certificate """
         cert = Session.query.filter_by(s_id=feedbackEntity.session.s_id).first().cert 
         wkhtmltopdf = WKHtmlToPdf('-T 10 -B 10 -O Landscape -s Letter --zoom 1.5')
@@ -418,14 +418,6 @@ def filter_invites():
     areaOI=db.session.query(Feedback.areaofinterest).distinct().all()	
     ses = db.session.query(Session.name).distinct().all()
     return {'areaOI':areaOI,'session':ses} 
-
-@app.route("/send_invites",methods=['GET','POST'])
-def sendInvites():
-    sessions = db.session.query(Session).filter(Session.scheduled_on > datetime.datetime.now()).all()
-    if request.method == 'POST':
-        pass
-    return render_template("sendinvites.html",sessions=sessions)
-
 
 @app.route("/invites",methods=['GET','POST'])
 def Invites():

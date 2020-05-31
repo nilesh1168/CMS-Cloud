@@ -30,6 +30,7 @@ class ArrangeSessionForm(FlaskForm):
     session_name = StringField("Name of Session",validators=[DataRequired("Name Required!!!")])
     session_domain = StringField("Domain of Session",validators=[DataRequired("Domain Required!!!")])
     session_date = DateTimeLocalField("Date and Time to be Conducted",format='%Y-%m-%dT%H:%M',validators=[DataRequired("Date Required"),])
+    submit = SubmitField("Submit")
     #session_time = StringField("Time to be Conducted",validators=[DataRequired("Date Required"),],render_kw={"placeholder": "HHMMSS"})
 
 

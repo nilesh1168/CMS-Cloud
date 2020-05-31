@@ -47,6 +47,36 @@
         
 
     </script>
+        <div  id="upcoming_session" class="container-fluid">
+            <h3 class="text-center text-dark my-4">Send Invites for Upcoming Sessions</h3>
+            {% if sessions %}
+            <table class="table table-hover">
+              <thead class="thead-inverse">
+                  <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Domain</th>
+                      <th>Scheduled On</th>
+                  </tr>
+              </thead>
+                  <tbody>
+                    
+                    {% for session in sessions %}
+                    <tr>
+                      <td>{{ session.s_id }}</td>
+                      <td>{{ session.name }}</td>
+                      <td>{{ session.domain }}</td>
+                      <td>{{ session.scheduled_on }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+          </table>
+          {% else %}
+            <div class="container"><p class="text-center">No Sessions!!</p></div>
+          {% endif %}
+          <hr>
+          </div>    
+
     <div id="hidethis" >
         <h3 class="text-center text-dark">Invite List</h3>
         <div class="container">
@@ -107,44 +137,11 @@
         <hr>
 
     </div>
-
-    <div  id="upcoming_session" class="container-fluid">
-        <h3 class="text-center text-dark my-4">Send Invites for Upcoming Sessions</h3>
-        {% if sessions %}
-        <table class="table table-hover">
-          <thead class="thead-inverse">
-              <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Domain</th>
-                  <th>Scheduled On</th>
-              </tr>
-          </thead>
-              <tbody>
-                
-                {% for session in sessions %}
-                <tr>
-                  <td>{{ session.s_id }}</td>
-                  <td>{{ session.name }}</td>
-                  <td>{{ session.domain }}</td>
-                  <td>{{ session.scheduled_on }}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-      </table>
-      {% else %}
-        <div class="container"><p class="text-center">No Sessions!!</p></div>
-      {% endif %}
-      </div>
-    
-
-      
     
     <div class="row">
         <div class="col-sm-4"></div>
-        
         <div class="col-md-4">
-            <input type="button" onclick='printChecked()' value="Send Invites" /> 
+            <div class="text-center"><input type="button" onclick='printChecked()' value="Send Invites" /></div> 
         </div>
         <div class="col-md-4"></div>
       </div>

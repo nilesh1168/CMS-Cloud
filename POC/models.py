@@ -1,7 +1,7 @@
 from POC import db,login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
+import sqlalchemy.orm.relationships
 
 @login.user_loader
 def load_user(ident):
@@ -31,7 +31,7 @@ class Question(db.Model):
     __tablename__='Question_Table'
     q_id = db.Column(db.Integer(),primary_key=True)
     question = db.Column(db.String(750))
-    s_id = db.Column('session_id',db.Integer(),db.ForeignKey('Session.s_id'))
+    s_id = db.Column('session_id',db.Integer(),db.ForeignKey('Session.s_id',ondelete='CASCADE'))
 
     def __repr__(self):
         return 'Question : {}'.format(self.question) 
@@ -48,7 +48,7 @@ class Session(db.Model):
     domain = db.Column(db.String(20))
     scheduled_on = db.Column(db.DateTime(),nullable=False)
     cert = db.Column(db.String(150),nullable=False)
-    
+
     def __repr__(self):
         return 'Domain : {}'.format(self.domain)
 
