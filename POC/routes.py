@@ -289,6 +289,13 @@ def getSession():
     students = db.session.query(StudInfo.name , StudInfo.email , StudInfo.city, query.c.description, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
     return { 'students':students }
 
+@app.route("/getSession_invite",methods=['GET'])
+def getSession_invite():
+    session = request.args.get('session',"",type = str)
+    query = db.session.query(Feedback.mobile, Feedback.areaofinterest, Session.name).filter(Feedback.session == Session.s_id).filter(Session.name == session).subquery()
+    students = db.session.query( StudInfo.email ,StudInfo.name,  query.c.areaofinterest, query.c.name).filter(StudInfo.mobile == query.c.mobile).order_by(StudInfo.name).all()
+    return { 'students':students }
+
 
 @app.route('/report/<s_id>',methods=['GET','POST'])
 def genReport(s_id):
@@ -351,9 +358,26 @@ def getAOI():
     print(d)
     return d
 
+    @app.route("/users",methods=['GET','POST'])
+def getUsers():
+    """To view users"""
+    users= Admin.query.paginate(1,app.config['ENTRIES_PER_PAGE'],False)
+    return render_template("users.html",title='Users',users = users.items)
+
+@app.route("/deluser",methods=['GET','POST'])
+def del_User():
+    """To delete User"""
+    u = Admin.query.filter_by(mobile = request.args.get('mobile')).first()
+    print(u)
+    db.session.delete(u)
+    db.session.commit()
+    flash("User Deleted!!")
+    l = get_flashed_messages()
+    return l[0]
+
 
 @app.route("/filter",methods=['GET'])
-def filter():
+def filter():	
     city = db.session.query(StudInfo.city).distinct().all()
     ses = db.session.query(Session.name).distinct().all()
     return {'city': city,'session':ses }    
