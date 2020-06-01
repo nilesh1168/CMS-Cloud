@@ -286,7 +286,6 @@ def getFeedback():
         stud.session.append(feedbackEntity.session)
         db.session.add(stud)
         db.session.add(res)
-        db.session.commit()
         """Add Feedback
             API call for sentiment  
         """
