@@ -279,8 +279,9 @@ def getFeedback():
     if form.validate_on_submit():
         stud = StudInfo(mobile = form.contact.data,name = form.name.data,email = form.email.data,address = form.address.data,city = form.city.data)
         """Add response"""
+        print(type(feedbackEntity.answer))
         print(type(feedbackEntity.session))
-        res = Response(answer = feedbackEntity.answer,session = feedbackEntity.session.s_id,stud_mobile = form.contact.data)
+        res = Response(answer = feedbackEntity.answer,session = (feedbackEntity.session).s_id,stud_mobile = form.contact.data)
         """Add Association"""
         stud.session.append(feedbackEntity.session)
         db.session.add(stud)

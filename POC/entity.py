@@ -1,12 +1,7 @@
+from POC.models import Session
 class feedbackEntity:
     answer = None
-    session = None
+    session = Session()
     def __init__(self,answer,session):
         self.answer = answer
         self.session = session
-
-    def getSession(self):
-        return self.session    
-
-    def getAnswers(self):
-        return self.answer    
