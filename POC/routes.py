@@ -302,7 +302,7 @@ def getFeedback():
             msg.attach("certificate.pdf",content_type="application/pdf", data=fp.read())
         thr = Thread(target=send_async_email, args=[msg])
         thr.start()
-        os.remove(app.config["CERT_PATH"]+"certificate.pdf")
+        os.remove(app.config["CERT_PATH"]+"cert.pdf")
         return render_template('success.html')
     return render_template("feedbackform.html",form=form)    
 
