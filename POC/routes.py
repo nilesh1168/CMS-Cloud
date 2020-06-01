@@ -456,15 +456,34 @@ def filter_invites():
     ses = db.session.query(Session.name).distinct().all()
     return {'areaOI':areaOI,'session':ses} 
 
+@app.route("/sendEmail_invites",methods=['GET','POST'])
+def sendEmail_invites():
+        """Mail the invites"""
+        mail = request.args.get('mail').split(',')
+        sid = request.args.get('session_id')
+
+        query_name= db.session.query(Session.name).filter(Session.s_id == sid).first()
+        query_schedule= db.session.query(Session.scheduled_on).filter(Session.s_id == sid).scalar()
+        date = query_schedule.strftime("%d %B %Y")
+        time = query_schedule.strftime("%H:%M")
+        
+        #print('Dear Participants \n Prudent Software and Grooming Acadamy invite you to attend the  '+str(query_name[0])+'seminar which will be held on '+date+' at '+time+'.\n We would be glad if you participate in this seminar as it will help to shape your career and resolve doubts regarding the same.\n\n\n Regards \n Prudent \n 09309799864 ')
+        
+        
+        # msg = Message(subject = 'Invitation for new Session',recipients = mail , body = 'Dear Participants \n Prudent Software and Grooming Acadamy invite you to attend the  '+str(query_name[0])+'seminar which will be held on '+date+' at '+time+'.\n We would be glad if you participate in this seminar as it will help to shape your career and resolve doubts regarding the same.\n\n\n Regards \n Prudent \n 09309799864 ',sender = 'developernil98@gmail.com')
+        return "Invite has been sent!"
+
+
 @app.route("/invites",methods=['GET','POST'])
 def Invites():
     # apply filter of date(6 months)
     date = datetime.datetime.now()
+    s = Session.query.filter(Session.scheduled_on > datetime.datetime.now()).all()
     date = date + relativedelta(months=-6)
     query = db.session.query(Feedback.mobile, Feedback.areaofinterest, Session.name).filter(Feedback.session == Session.s_id).filter(Session.scheduled_on > date).subquery()
     students = db.session.query(StudInfo.email,StudInfo.name , query.c.areaofinterest,query.c.name).filter(StudInfo.mobile== query.c.mobile).order_by(StudInfo.name).all()
     
-    return render_template("Invitess.html",students=students,title="Invites")#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
+    return render_template("Invitess.html",students=students,title="Invites",sessions=s)#,next=next_url,prev=prev_url,pages=pages,cur_page=cur_page)
    
 
 @app.route("/service-worker.js",methods = ['GET','POST'])
