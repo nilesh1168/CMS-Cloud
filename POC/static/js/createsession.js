@@ -1,12 +1,15 @@
-$(function () {
-    $("#questions-from").hide();
-    $("#image-sel").hide();
-});
-
 var session_id;
 var adata;
 var qdata;
 var cert;
+var flag = 0;
+
+$(function () {
+    console.log(flag);
+    $("#questions-from").hide();
+    $("#image-sel").hide();
+});
+
 $("#aproceed").click(function (e) {
     if (document.forms["arrangeform"]["session_name"].value == "" || document.forms["arrangeform"]["session_domain"].value == "" || document.forms["arrangeform"]["session_date"].value == "" ) {
         document.getElementById("js-error").innerHTML = "Field(s) cannot be empty!!"
@@ -73,7 +76,7 @@ $("#submit-btn").click(function (e) {
     e.preventDefault();
     $.ajax({
         type: "POST",
-        url: Flask.url_for('arrange',{'adata' : JSON.stringify(adata) , 'qdata' : JSON.stringify(qdata) , 'cert' : cert}),
+        url: Flask.url_for('arrange',{'adata' : JSON.stringify(adata) , 'qdata' : JSON.stringify(qdata) , 'cert' : cert, 'flag':flag }),
         success: function (response) {
             window.location.href = Flask.url_for('getSessions')
         }

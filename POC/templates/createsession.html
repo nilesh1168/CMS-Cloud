@@ -13,6 +13,7 @@
 
 <body>
     {% block page_content %}
+    
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
@@ -20,14 +21,49 @@
             <div class="col-md-4">
                 <div id="arrange-form">
                     {% if sessions %}
-                    <form method="post">
+                    <form name="arrangeform" id="arrangeform" method="post">
                         {{ form.hidden_tag() }}
                         <h3 class="text-center">Edit Session</h3>
                         {{ wtf.form_field(form.session_name,value=sessions.name) }}
                         {{ wtf.form_field(form.session_domain,value=sessions.domain) }}
                         {{ wtf.form_field( form.session_date,value=sessions.scheduled_on.strftime('%Y-%m-%dT%H:%M')) }}
-                        {{ wtf.form_field(form.submit) }}
+                        <button id="aproceed" type="button" class="btn btn-primary">Proceed</button>
                     </form>
+                </div>
+                <div id="questions-from">
+                    <form name="qform" id="qform" method="post">
+                        {{ qform.hidden_tag() }}
+                        <h3 class="text-center">Set Questions</h3>
+                        {{ wtf.form_field(qform.Q1,value = questions[0].question) }}
+                        {{ wtf.form_field(qform.Q2,value = questions[1].question) }}
+                        {{ wtf.form_field( qform.Q3,value = questions[2].question) }}
+                        {{ wtf.form_field( qform.Q4,value = questions[3].question) }}
+                        {{ wtf.form_field( qform.Q5,value = questions[4].question) }}
+                        <button id="qproceed" type="button" class="btn btn-primary">Proceed</button>
+                        <button id="qback" type="button" class="btn btn-primary">Back</button>
+                    </form>
+                </div>
+                <div class="container-fluid text-center" id="js-error" style="color: red; padding-top: 10pt;"></div>
+            </div>
+            <div class="col-md-4"> </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div id="image-sel">
+                    Images
+                    <form id='image-sel-form'>
+                        {% for item in itemList %}
+                        <li type="none">
+                            <input type="radio" id="{{ item }}" name="cert" value="{{ item }}">
+                            <label for="{{ item }}">{{ item }}</label>
+                        </li>
+                        {% endfor %}
+                        <button id = "submit-btn" type="button" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-8" id="preview"></div>
+        </div>
                     {% else %}
                     <h3 class="text-center">Schedule Session</h3>
                     <form name="arrangeform" id="arrangeform" method="post">
@@ -77,6 +113,12 @@
     <script src="{{ url_for('static',filename='js/formToJson.js') }}"></script>
     <script src="{{ url_for('static',filename='js/formToJson.min.js') }}"></script>
     <script src="{{ url_for('static',filename='js/createsession.js') }}"></script>
+    {% if sessions %}
+            <script>
+                flag = {{ sessions.s_id }}
+            </script>
+    {% endif %}
+    
     {% endblock %}
 </body>
 

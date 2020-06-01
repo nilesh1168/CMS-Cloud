@@ -194,20 +194,36 @@ def arrange():
     adata = json.loads(request.args.get('adata'))
     qdata = json.loads(request.args.get('qdata'))
     cert = request.args.get('cert')
-    session = Session(name = adata['session_name'] ,domain = adata['session_domain'] ,scheduled_on= adata['session_date'].replace("T"," "), cert=cert)
-    db.session.add(session)
-    db.session.commit()
-    objects = [
+    update = int(request.args.get('flag'))
+    print(type(update))
+    if update:
+        s = Session.query.filter_by(s_id=update).first()
+        s.name = adata['session_name']
+        s.domain = adata['session_domain']
+        s.scheduled_on = adata['session_date'].replace("T"," ")
+        s.cert = cert
+        q = Question.query.filter_by(s_id=update).all()
+        q[0].question = qdata['Q1']
+        q[1].question = qdata['Q2']
+        q[2].question = qdata['Q3']
+        q[3].question = qdata['Q4']
+        q[4].question = qdata['Q5']
+        db.session.commit()
+    else:
+        session = Session(name = adata['session_name'] ,domain = adata['session_domain'] ,scheduled_on= adata['session_date'].replace("T"," "), cert=cert)
+        db.session.add(session)
+        db.session.commit()
+        objects = [
         Question(question= qdata['Q1'], s_id= session.s_id),
         Question(question= qdata['Q2'], s_id= session.s_id),
         Question(question= qdata['Q3'], s_id= session.s_id),
         Question(question= qdata['Q4'], s_id= session.s_id),
         Question(question= qdata['Q5'], s_id= session.s_id),
-    ]
-    db.session.bulk_save_objects(objects)
-    db.session.commit()
-    flash("Session created Successfully!!")
-    return str(session.s_id)
+        ]
+        db.session.bulk_save_objects(objects)
+        db.session.commit()
+        flash("Session created Successfully!!")
+    return "success"
     # return '5'
 
 
@@ -386,17 +402,21 @@ def del_Session():
 @app.route("/editsession/<id>",methods=['GET','POST'])
 def edit_Session(id):
     print(id)
-    s = Session.query.filter_by(s_id =id).first()
+    CERT_SYSTEM = base_dir+url_for('static',filename='img/certificate')
+    itemList = os.listdir(CERT_SYSTEM)
+    s = Session.query.filter_by(s_id = id).first()
+    q = Question.query.filter_by(s_id = id).all()
     form = ArrangeSessionForm()
-    if request.method == 'POST' and form.validate():
-        s.name = form.session_name.data
-        s.domain = form.session_domain.data
-        s.scheduled_on = form.session_date.data       
-        db.session.add(s)
-        db.session.commit()
-        flash("Session modified Successfully!!")
-        return redirect(url_for('getSessions'))        
-    return render_template("createsession.html", title = "Schedule", form = form,sessions=s)
+    qform = QuestionForm()
+    # if request.method == 'POST' and form.validate():
+    #     s.name = form.session_name.data
+    #     s.domain = form.session_domain.data
+    #     s.scheduled_on = form.session_date.data       
+    #     db.session.add(s)
+    #     db.session.commit()
+    #     flash("Session modified Successfully!!")
+    #     return redirect(url_for('getSessions'))        
+    return render_template("createsession.html", title = "Schedule", form = form,sessions=s,questions=q,qform=qform,itemList=itemList,CERT_SYSTEM = CERT_SYSTEM)
 
 @app.route("/getdata",methods=['GET'])
 def getAOI():
