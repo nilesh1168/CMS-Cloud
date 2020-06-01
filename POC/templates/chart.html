@@ -9,12 +9,10 @@
   <h1 style="text-align: center;"><b>{{ name }}</b></h1>
     {% endblock%}
   {% block page_content %}
- 
-  <table class="table table-borderless" style="table-layout: fixed;">
+  <div class="container-fluid text-center" id="no-rep"></div>
+  <table id="hide" class="table table-borderless" style="table-layout: fixed;">
         <tbody>
-           
             <tr>
-                
                 <td>
                  <div id="chartContainer" class="my-3 mx-3" style="height:300px; width:580px;padding-left:75px;padding-right:75px"></div>
                 </td>
@@ -144,8 +142,7 @@
 
             </td>
             
-        </tr>
-            
+        </tr>   
         </tbody>
 </table>
 
@@ -156,10 +153,6 @@
   }
   </script>
   <script src="{{ url_for('static',filename='js/genReport.js') }}"></script>
-  <script src="{{ url_for('static',filename='js/summary.js') }}"></script>
-
-  
-    
   {% endblock%} 
 </body>
 </html>

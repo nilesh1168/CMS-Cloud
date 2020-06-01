@@ -66,63 +66,64 @@ def summarization(id):
     summarizer=LexRankSummarizer()
     """Summarization and Factors influnce for POSITIVE feedbacks"""
     pos_query = Feedback.query.filter_by(sentiment='POSITIVE').filter_by(session=id).all()
-    pos_text = ""
-    for i in range(len(pos_query)):
-        pos_text = pos_text + str(pos_query[i].description)
-
-    cleaned_pos_text = pos_text.lower().translate(str.maketrans('', '', string.punctuation))
-    tokenized_pos_words = word_tokenize(cleaned_pos_text, "english")
-    final_pos_words = []
-    for word in tokenized_pos_words:
-        if word not in stopwords.words('english'):
-            final_pos_words.append(word)
-
-    """Counting Factors for POSITIVE"""
-    w = Counter(final_pos_words) 
-    a={}
-    count =0
-    for x in List_of_factor:
-        if x in w.keys():
-            a[x]=w[x]
-    pos_fact = sorted(a.items(), key=lambda x: x[1],reverse=True)    
-
-    """Summary of POSITIVE"""
-    parser=PlaintextParser.from_string(pos_text,Tokenizer("english"))
-    summ_Pos = ""
-    abstract_pos = summarizer(parser.document,1)
-    for sentence in abstract_pos:
-        summ_Pos = summ_Pos + str(sentence)
-
-    """Summarization and Factors influnce for NEGATIVE feedbacks"""
     neg_query = Feedback.query.filter_by(sentiment='NEGATIVE').filter_by(session=id).all()
-    neg_text = ""
-    for i1 in range(len(neg_query)):
-        neg_text= neg_text + str(neg_query[i1].description)
+    if len(pos_query) == 0 and len(neg_query) == 0:
+        return "0"
+    else:     
+        pos_text = ""
+        for i in range(len(pos_query)):
+            pos_text = pos_text + str(pos_query[i].description)
 
-    cleaned_neg_text = neg_text.lower().translate(str.maketrans('', '', string.punctuation))
-    tokenized_neg_words = word_tokenize(cleaned_neg_text, "english")
-    final_neg_words = []
-    for word in tokenized_neg_words:
-        if word not in stopwords.words('english'):
-            final_neg_words.append(word)
+        cleaned_pos_text = pos_text.lower().translate(str.maketrans('', '', string.punctuation))
+        tokenized_pos_words = word_tokenize(cleaned_pos_text, "english")
+        final_pos_words = []
+        for word in tokenized_pos_words:
+            if word not in stopwords.words('english'):
+                final_pos_words.append(word)
 
-    """Counting Factors for NEGATIVE"""
-    w = Counter(final_neg_words)
-    b={}
-    count = 0
-    for x in List_of_factor:
-        if x in w.keys():
-            b[x]=w[x]
-    neg_fact = sorted(b.items(), key=lambda x: x[1],reverse=True)
-    """Summary of NEGATIVE"""
-    parser=PlaintextParser.from_string(neg_text,Tokenizer("english"))
-    summ_Neg= " "
-    abstract_neg = summarizer(parser.document,1)
-    for sentence in abstract_neg:
-        summ_Neg = summ_Neg + str(sentence)
+        """Counting Factors for POSITIVE"""
+        w = Counter(final_pos_words) 
+        a={}
+        for x in List_of_factor:
+            if x in w.keys():
+                a[x]=w[x]
+        pos_fact = sorted(a.items(), key=lambda x: x[1],reverse=True)    
 
-    return {'cnt_pos': pos_fact[0:5] , 'cnt_neg': neg_fact[0:5],'summ_pos':summ_Pos,'summ_neg':summ_Neg }    
-    #return render_template('xyz.html',freq1=dict,summary=summaryP,freq=dict1,abst=summaryN)
+        """Summary of POSITIVE"""
+        parser=PlaintextParser.from_string(pos_text,Tokenizer("english"))
+        summ_Pos = ""
+        abstract_pos = summarizer(parser.document,1)
+        for sentence in abstract_pos:
+            summ_Pos = summ_Pos + str(sentence)
+
+        """Summarization and Factors influnce for NEGATIVE feedbacks"""
+        neg_text = ""
+        for i1 in range(len(neg_query)):
+            neg_text= neg_text + str(neg_query[i1].description)
+
+        cleaned_neg_text = neg_text.lower().translate(str.maketrans('', '', string.punctuation))
+        tokenized_neg_words = word_tokenize(cleaned_neg_text, "english")
+        final_neg_words = []
+        for word in tokenized_neg_words:
+            if word not in stopwords.words('english'):
+                final_neg_words.append(word)
+
+        """Counting Factors for NEGATIVE"""
+        w = Counter(final_neg_words)
+        b={}
+        for x in List_of_factor:
+            if x in w.keys():
+                b[x]=w[x]
+        neg_fact = sorted(b.items(), key=lambda x: x[1],reverse=True)
+        """Summary of NEGATIVE"""
+        parser=PlaintextParser.from_string(neg_text,Tokenizer("english"))
+        summ_Neg= " "
+        abstract_neg = summarizer(parser.document,1)
+        for sentence in abstract_neg:
+            summ_Neg = summ_Neg + str(sentence)
+
+        return {'cnt_pos': pos_fact[0:5] , 'cnt_neg': neg_fact[0:5],'summ_pos':summ_Pos,'summ_neg':summ_Neg }    
+        #return render_template('xyz.html',freq1=dict,summary=summaryP,freq=dict1,abst=summaryN)
 
 
 
@@ -134,7 +135,6 @@ def cert():
     domain=request.args.get('domain')
     date=request.args.get('date')
     cert = request.args.get('cert')
-    print(cert)
     return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date,cert=cert)
 
 
@@ -195,7 +195,6 @@ def arrange():
     qdata = json.loads(request.args.get('qdata'))
     cert = request.args.get('cert')
     update = int(request.args.get('flag'))
-    print(type(update))
     if update:
         s = Session.query.filter_by(s_id=update).first()
         s.name = adata['session_name']
@@ -224,7 +223,7 @@ def arrange():
         db.session.commit()
         flash("Session created Successfully!!")
     return "success"
-    # return '5'
+
 
 
 @app.route("/schedule",methods=['GET'])
@@ -255,14 +254,11 @@ def start_session():
         dateTimeB = obj.scheduled_on
         dateTimeDifference = dateTimeA - dateTimeB
         dateTimeDifferenceInHours = dateTimeDifference.total_seconds() / 3600
-        print("dateTimeDifferenceInHours",dateTimeDifferenceInHours,obj.name)
+        # print("dateTimeDifferenceInHours",dateTimeDifferenceInHours,obj.name)
         if dateTimeDifferenceInHours > 0:
             l.append(dateTimeDifferenceInHours)
     a = min(l)
-    print("inside /feedback",t[l.index(a)].domain)
     q = Question.query.filter_by(s_id=t[l.index(a)].s_id).all()
-    print(len(q))
-    print(q)
     return render_template("welcome.html",session = t[l.index(a)].domain,question=q)
 
 @app.route("/feedback_form",methods=['GET'])
@@ -270,12 +266,8 @@ def feedback_form():
     form = FeedbackForm()
     answer = request.args.get('data')
     s_domain = request.args.get('session')
-    print(answer)
-    print(s_domain)
     """Get session_id """
     session = Session.query.filter_by(domain=s_domain).first()
-    print(type(session))
-    print(session.s_id)
     feedbackEntity.answer = answer
     feedbackEntity.session = session
     return render_template("feedbackform.html",form=form)
@@ -284,7 +276,6 @@ def feedback_form():
 def getFeedback():
     form = FeedbackForm(request.form)
     now = datetime.datetime.now().time()
-    print(form.validate_on_submit())
     if form.validate_on_submit():
         stud = StudInfo(mobile = form.contact.data,name = form.name.data,email = form.email.data,address = form.address.data,city = form.city.data)
         """Add response"""
@@ -311,6 +302,7 @@ def getFeedback():
             msg.attach("certificate.pdf",content_type="application/pdf", data=fp.read())
         thr = Thread(target=send_async_email, args=[msg])
         thr.start()
+        os.remove(app.config["CERT_PATH"]+"certificate.pdf")
         return render_template('success.html')
     return render_template("feedbackform.html",form=form)    
 
@@ -352,7 +344,6 @@ def getAOI_invite():
     date = datetime.datetime.now()
     date = date + relativedelta(months=-6)
     areaOI = request.args.get('areaOI')
-    print(areaOI)
     query = db.session.query(Feedback.mobile, Feedback.areaofinterest, Session.name).filter(Feedback.session == Session.s_id).filter(Session.scheduled_on > date).subquery()
     students = db.session.query(StudInfo.email , StudInfo.name , query.c.areaofinterest, query.c.name).filter(StudInfo.mobile == query.c.mobile).filter(query.c.areaofinterest== areaOI).order_by(StudInfo.name).all()
     return { 'students':students }
@@ -362,14 +353,21 @@ def getAOI_invite():
 @app.route('/report/<s_id>',methods=['GET','POST'])
 def genReport(s_id):
     response = Response.query.filter_by(session=s_id).first()
+    if not response:
+        id = 0
+    else:
+        id=response.session    
     session = Session.query.filter_by(s_id=s_id).first()
-    return render_template("chart.html",id=response.session,name=session.name,title="Report")
+    name=session.name
+    return render_template("chart.html",id=id,name=name,title="Report")
     
 
 @app.route('/getReport',methods=['GET','POST'])
 def REPORT():
     id = request.args.get('id')
     response = Response.query.filter_by(session=id).all()
+    if not response:
+        return "0"
     questions = calcAnswers(response)
     feed_pos = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='POSITIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
     feed_neg = db.session.query(db.func.count(Feedback.sentiment)).filter_by(sentiment='NEGATIVE').filter_by(session=id).group_by(Feedback.sentiment).first()
@@ -378,7 +376,7 @@ def REPORT():
     return questions
 
 @app.route("/getSummary",methods = ['GET','POST'])
-def getSummary(): 
+def getSummary():
     return summarization(request.args.get('id'))
 
 @app.route("/sessions",methods=['GET','POST'])
@@ -423,7 +421,6 @@ def getAOI():
     data_aoi = db.session.query(db.func.count(Feedback.areaofinterest),Feedback.areaofinterest).group_by(Feedback.areaofinterest).all()
     data_sentiment = db.session.query(Feedback.sentiment ,db.func.count(Feedback.sentiment)).group_by(Feedback.sentiment).all()
     d = {'AOI': data_aoi , 'sentiment':data_sentiment} 
-    print(d)
     return d
 
 @app.route("/users",methods=['GET','POST'])
@@ -436,7 +433,6 @@ def getUsers():
 def del_User():
     """To delete User"""
     u = Admin.query.filter_by(mobile = request.args.get('mobile')).first()
-    print(u)
     db.session.delete(u)
     db.session.commit()
     flash("User Deleted!!")
@@ -447,7 +443,7 @@ def del_User():
 @app.route("/filter",methods=['GET'])
 def filter():	
     city = db.session.query(StudInfo.city).distinct().all()
-    ses = db.session.query(Session.name).distinct().all()
+    ses = db.session.query(Session.name).filter(Session.scheduled_on < datetime.datetime.now()).distinct().all()
     return {'city': city,'session':ses}   
     
 @app.route("/filter_invite",methods=['GET'])
@@ -461,16 +457,13 @@ def sendEmail_invites():
         """Mail the invites"""
         mail = request.args.get('mail').split(',')
         sid = request.args.get('session_id')
-
         query_name= db.session.query(Session.name).filter(Session.s_id == sid).first()
         query_schedule= db.session.query(Session.scheduled_on).filter(Session.s_id == sid).scalar()
         date = query_schedule.strftime("%d %B %Y")
         time = query_schedule.strftime("%H:%M")
-        
-        #print('Dear Participants \n Prudent Software and Grooming Acadamy invite you to attend the  '+str(query_name[0])+'seminar which will be held on '+date+' at '+time+'.\n We would be glad if you participate in this seminar as it will help to shape your career and resolve doubts regarding the same.\n\n\n Regards \n Prudent \n 09309799864 ')
-        
-        
-        # msg = Message(subject = 'Invitation for new Session',recipients = mail , body = 'Dear Participants \n Prudent Software and Grooming Acadamy invite you to attend the  '+str(query_name[0])+'seminar which will be held on '+date+' at '+time+'.\n We would be glad if you participate in this seminar as it will help to shape your career and resolve doubts regarding the same.\n\n\n Regards \n Prudent \n 09309799864 ',sender = 'developernil98@gmail.com')
+        msg = Message(subject = 'Invitation for new Session',recipients = mail , body = 'Dear Participants \n Prudent Software and Grooming Acadamy invite you to attend the  '+str(query_name[0])+'seminar which will be held on '+date+' at '+time+'.\n We would be glad if you participate in this seminar as it will help to shape your career and resolve doubts regarding the same.\n\n\n Regards \n Prudent \n 09309799864 ',sender = 'developernil98@gmail.com')
+        thr = Thread(target=send_async_email, args=[msg])
+        thr.start()
         return "Invite has been sent!"
 
 
