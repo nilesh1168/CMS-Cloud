@@ -8,7 +8,6 @@ from werkzeug.urls import url_parse
 import datetime,string,json,boto3,os
 from datetime import timedelta
 from dateutil.relativedelta import *
-from POC.entity import feedbackEntity
 from wkhtmltopdfwrapper import WKHtmlToPdf
 from threading import Thread
 from collections import Counter
@@ -21,6 +20,8 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 from .config import base_dir
 
+answer = ""
+session = 0
 comprehend = client = boto3.client('comprehend')
 
 def send_async_email(msg):
@@ -264,12 +265,12 @@ def start_session():
 @app.route("/feedback_form",methods=['GET'])
 def feedback_form():
     form = FeedbackForm()
+    global answer
     answer = request.args.get('data')
     s_domain = request.args.get('session')
     """Get session_id """
+    global session 
     session = Session.query.filter_by(domain=s_domain).first()
-    feedbackEntity.answer = answer
-    feedbackEntity.session = session
     return render_template("feedbackform.html",form=form)
 
 @app.route("/getFeedback",methods=['GET','POST'])
@@ -279,26 +280,26 @@ def getFeedback():
     if form.validate_on_submit():
         stud = StudInfo(mobile = form.contact.data,name = form.name.data,email = form.email.data,address = form.address.data,city = form.city.data)
         """Add response"""
-        print(type(feedbackEntity.answer))
-        print(type(feedbackEntity.session))
-        res = Response(answer = feedbackEntity.answer,session = (feedbackEntity.session).s_id,stud_mobile = form.contact.data)
+        print(type(answer))
+        print(type(session))
+        res = Response(answer = answer,session = session.s_id,stud_mobile = form.contact.data)
         """Add Association"""
-        stud.session.append(feedbackEntity.session)
+        stud.session.append(session)
         db.session.add(stud)
         db.session.add(res)
         """Add Feedback
             API call for sentiment  
         """
         sentiment = comprehend.detect_sentiment(Text=form.feedback.data, LanguageCode='en')
-        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = feedbackEntity.session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
+        feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
         db.session.commit()
         """ Generate PDF Certificate """
-        cert = Session.query.filter_by(s_id=feedbackEntity.session.s_id).first().cert 
-        wkhtmltopdf = WKHtmlToPdf('-T 10 -B 10 -O Landscape -s Letter --zoom 1.5')
-        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=feedbackEntity.session.name,domain = feedbackEntity.session.domain ,date =datetime.date.today(),cert=cert,_external=True), app.config['CERT_PATH']+"cert.pdf")
+        cert = Session.query.filter_by(s_id=session.s_id).first().cert 
+        wkhtmltopdf = WKHtmlToPdf('-O Landscape -s Letter --zoom 1.5')
+        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=session.name,domain = session.domain ,date =datetime.date.today(),cert=cert,_external=True), app.config['CERT_PATH']+"cert.pdf")
         """Mail the certificate to the participant"""
-        msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+feedbackEntity.session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
+        msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
         with app.open_resource("certificate/cert.pdf") as fp:
             msg.attach("certificate.pdf",content_type="application/pdf", data=fp.read())
         thr = Thread(target=send_async_email, args=[msg])
@@ -306,6 +307,12 @@ def getFeedback():
         os.remove(app.config["CERT_PATH"]+"cert.pdf")
         return render_template('success.html')
     return render_template("feedbackform.html",form=form)    
+
+
+# @app.route('/genPDF',methods=['GET','POST'])
+# def genPDF():
+#     wkhtmltopdf = WKHtmlToPdf('-O Landscape -s Letter --zoom 1.5')
+#     wkhtmltopdf.render(url_for('cert',s_name = "NILESH SURYAWANSHI",session_name="DMW",domain = "Analytics" ,date = datetime.date.today(),cert="cert1.jpg",_external=True), app.config['CERT_PATH']+"cert.pdf")
 
 
 @app.route("/show",methods=['GET','POST'])

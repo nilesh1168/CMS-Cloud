@@ -37,12 +37,10 @@ div#cert-issued-by, div#cert-ceo-design {
   }
   
   body {
-   
     width: 950px;
     height: 690px;
     position: absolute;
     left: 30px;
-    top: 30px;
     /* margin: 20px 150px; */
     text-align: center;
   }
@@ -61,7 +59,7 @@ div#cert-issued-by, div#cert-ceo-design {
   
   p.smaller {
     font-size: 17px !important;
-    margin: 20px 210px;
+    margin: 10px 210px;
   }
   
   p.stamp {
