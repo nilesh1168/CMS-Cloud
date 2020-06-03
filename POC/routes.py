@@ -134,7 +134,7 @@ def genPDF():
     """ Generate PDF Certificate """
     return render_pdf(url_for('cert',s_name = name,session_name=session_name,domain = domain ,date = datetime.date.today(),cert=cert,_external=True),download_filename="certificate.pdf")#,redirect(url_for('success'))
 
-@app.route("/success",methods=['POST'])
+@app.route("/success",methods=['GET','POST'])
 def success():
     s_name=request.args.get('s_name')
     session_name=request.args.get('session_name')
@@ -297,7 +297,7 @@ def getFeedback():
         sentiment = comprehend.detect_sentiment(Text=form.feedback.data, LanguageCode='en')
         feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
-        db.session.commit()
+        # db.session.commit()
         cert = Session.query.filter_by(s_id=session.s_id).first().cert
         return redirect(url_for('success',s_name = form.name.data,session_name = session.name ,domain = session.domain ,cert = cert),code = 307)#render_pdf(url_for('cert',s_name = form.name.data,session_name=session.name,domain = session.domain ,date = datetime.date.today(),cert=cert,_external=True),download_filename="certificate.pdf")
     return render_template("feedbackform.html",form=form)    
