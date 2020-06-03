@@ -8,20 +8,19 @@ from werkzeug.urls import url_parse
 import datetime,string,json,boto3,os
 from datetime import timedelta
 from dateutil.relativedelta import *
-from wkhtmltopdfwrapper import WKHtmlToPdf
-from threading import Thread
 from collections import Counter
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-
+from flask_weasyprint import render_pdf
 import sumy
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lex_rank import LexRankSummarizer
 from .config import base_dir
+from threading import Thread
 
 answer = ""
-session = 0
+session = ""
 comprehend = client = boto3.client('comprehend')
 
 def send_async_email(msg):
@@ -126,8 +125,22 @@ def summarization(id):
         return {'cnt_pos': pos_fact[0:5] , 'cnt_neg': neg_fact[0:5],'summ_pos':summ_Pos,'summ_neg':summ_Neg }    
         #return render_template('xyz.html',freq1=dict,summary=summaryP,freq=dict1,abst=summaryN)
 
+@app.route("/certificate",methods=['POST'])
+def genPDF():
+    name=request.args.get('s_name')
+    session_name=request.args.get('session_name')
+    domain=request.args.get('domain')
+    cert = request.args.get('cert')
+    """ Generate PDF Certificate """
+    return render_pdf(url_for('cert',s_name = name,session_name=session_name,domain = domain ,date = datetime.date.today(),cert=cert,_external=True),download_filename="certificate.pdf")#,redirect(url_for('success'))
 
-
+@app.route("/success",methods=['POST'])
+def success():
+    s_name=request.args.get('s_name')
+    session_name=request.args.get('session_name')
+    domain=request.args.get('domain')
+    cert = request.args.get('cert')
+    return render_template("success.html",s_name=s_name,session_name=session_name,domain=domain,cert=cert)
 
 @app.route('/cert',methods=['GET','POST'])
 def cert():
@@ -137,6 +150,7 @@ def cert():
     date=request.args.get('date')
     cert = request.args.get('cert')
     return render_template('certificate.html',s_name=s_name,domain=domain,session_name=session_name,date = date,cert=cert)
+
 
 
 @app.route("/",methods = ['GET'])
@@ -235,15 +249,6 @@ def schedule():
     questionform = QuestionForm()
     CERT_SYSTEM = base_dir+url_for('static',filename='img/certificate')
     itemList = os.listdir(CERT_SYSTEM)
-    # if request.method == 'POST':
-    #     print("asjv")
-    #     if arrangeform.validate_on_submit() and arrangeform.arrange.data:
-    #         print("idk")
-    #         session = Session(name = arrangeform.session_name.data ,domain = arrangeform.session_domain.data ,scheduled_on= arrangeformform.session_date.data)
-    #         db.session.add(session)    
-    #         db.session.commit()
-    #         flash("Session created Successfully!!")
-    #         return redirect(url_for('getSessions'))
     return render_template("createsession.html", title = "Schedule Session", arrangeform = arrangeform, qform=questionform, itemList=itemList,CERT_SYSTEM = CERT_SYSTEM)
 
 @app.route("/feedback",methods = ['GET'])
@@ -273,15 +278,14 @@ def feedback_form():
     session = Session.query.filter_by(domain=s_domain).first()
     return render_template("feedbackform.html",form=form)
 
-@app.route("/getFeedback",methods=['GET','POST'])
+@app.route("/feedback",methods=['POST'])
 def getFeedback():
+    print("in /feedback POST")
     form = FeedbackForm(request.form)
     now = datetime.datetime.now().time()
     if form.validate_on_submit():
         stud = StudInfo(mobile = form.contact.data,name = form.name.data,email = form.email.data,address = form.address.data,city = form.city.data)
         """Add response"""
-        print(type(answer))
-        print(type(session))
         res = Response(answer = answer,session = session.s_id,stud_mobile = form.contact.data)
         """Add Association"""
         stud.session.append(session)
@@ -294,25 +298,9 @@ def getFeedback():
         feedback = Feedback(date = datetime.date.today(),time = now ,areaofinterest = form.areaofinterest.data,description = form.feedback.data,session = session.s_id,mobile = stud.mobile, sentiment = sentiment['Sentiment'] )
         db.session.add(feedback)
         db.session.commit()
-        """ Generate PDF Certificate """
-        cert = Session.query.filter_by(s_id=session.s_id).first().cert 
-        wkhtmltopdf = WKHtmlToPdf('-O Landscape -s Letter --zoom 1.5')
-        wkhtmltopdf.render(url_for('cert',s_name = form.name.data,session_name=session.name,domain = session.domain ,date =datetime.date.today(),cert=cert,_external=True), app.config['CERT_PATH']+"cert.pdf")
-        """Mail the certificate to the participant"""
-        msg = Message(subject = 'Prudent Participation Certificate',recipients = [form.email.data], body = 'This is an appreciation certificate from Prudent Grooming and Software Academy.\n We Thank You for participating in the session '+session.name+'.\n We hope to see you again in upcoming sessions!!!\n Thanks and Regards \n Prudent Grooming and Software Academy \n (PSGA)',sender = 'developernil98@gmail.com')
-        with app.open_resource("certificate/cert.pdf") as fp:
-            msg.attach("certificate.pdf",content_type="application/pdf", data=fp.read())
-        thr = Thread(target=send_async_email, args=[msg])
-        thr.start()
-        os.remove(app.config["CERT_PATH"]+"cert.pdf")
-        return render_template('success.html')
+        cert = Session.query.filter_by(s_id=session.s_id).first().cert
+        return redirect(url_for('success',s_name = form.name.data,session_name = session.name ,domain = session.domain ,cert = cert),code = 307)#render_pdf(url_for('cert',s_name = form.name.data,session_name=session.name,domain = session.domain ,date = datetime.date.today(),cert=cert,_external=True),download_filename="certificate.pdf")
     return render_template("feedbackform.html",form=form)    
-
-
-# @app.route('/genPDF',methods=['GET','POST'])
-# def genPDF():
-#     wkhtmltopdf = WKHtmlToPdf('-O Landscape -s Letter --zoom 1.5')
-#     wkhtmltopdf.render(url_for('cert',s_name = "NILESH SURYAWANSHI",session_name="DMW",domain = "Analytics" ,date = datetime.date.today(),cert="cert1.jpg",_external=True), app.config['CERT_PATH']+"cert.pdf")
 
 
 @app.route("/show",methods=['GET','POST'])
@@ -413,15 +401,7 @@ def edit_Session(id):
     s = Session.query.filter_by(s_id = id).first()
     q = Question.query.filter_by(s_id = id).all()
     form = ArrangeSessionForm()
-    qform = QuestionForm()
-    # if request.method == 'POST' and form.validate():
-    #     s.name = form.session_name.data
-    #     s.domain = form.session_domain.data
-    #     s.scheduled_on = form.session_date.data       
-    #     db.session.add(s)
-    #     db.session.commit()
-    #     flash("Session modified Successfully!!")
-    #     return redirect(url_for('getSessions'))        
+    qform = QuestionForm()       
     return render_template("createsession.html", title = "Schedule", form = form,sessions=s,questions=q,qform=qform,itemList=itemList,CERT_SYSTEM = CERT_SYSTEM)
 
 @app.route("/getdata",methods=['GET'])
@@ -495,3 +475,11 @@ def load_service():
 @app.errorhandler(404)
 def page_not_found(error):
     return 'This route does not exist {}'.format(request.url), 404
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return 'This method is not allowed {}'.format(request.method), 405
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return 'This application has internal error please contact admin. {}'.format(request.url), 405

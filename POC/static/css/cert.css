@@ -59,7 +59,10 @@ div#cert-issued-by, div#cert-ceo-design {
   
   p.smaller {
     font-size: 17px !important;
-    margin: 10px 210px;
+  }
+  p.cert-declaration {
+    font-size: 17px !important;
+    margin: 50px;
   }
   
   p.stamp {
@@ -87,3 +90,9 @@ div#cert-desc {
     font-size: 12px;
     color: grey;
   }
+@page 
+{ 
+  size: landscape;
+  margin: 0;
+  padding: 15px 25px 25px 40px;
+} 

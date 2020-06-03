@@ -2,45 +2,48 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Footer CSS -->
-    <link href="{{ url_for('static',filename='css/footer.css') }}" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet">
-    <title>Feedback</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- Bootstrap core CSS -->
+  <link href="{{ url_for('static',filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <!-- Footer CSS -->
+  <link href="{{ url_for('static',filename='css/footer.css') }}" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static',filename='css/style.css') }}" rel="stylesheet">
+  <title>Feedback</title>
+  {{ JSGlue.include() }}
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-dark " style="background-color: #039be5">
-          <a class="navbar-brand" href="#">Prudent</a>
-        </nav>
-      </header>
-      <main>
-        <div class="container">
-            <div class="row py-4">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <h3 class="text-center">Feedback Form</h3>
-                        {{ wtf.quick_form(form,action= url_for('getFeedback')) }} 
-                </div>
-                <div class="col-md-4"></div>    
-            </div>
+  <header>
+    <nav class="navbar navbar-expand-sm navbar-dark " style="background-color: #039be5">
+      <a class="navbar-brand" href="#">Prudent</a>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div class="row py-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <h3 class="text-center">Feedback Form</h3>
+          {{ wtf.quick_form(form) }}
         </div>
-      </main>
-    <footer class="footer mt-3">
-        <!-- Copyright -->
-        <div class="text-center">© 2019 Copyright:
-          <a> Prudent Grooming</a>
-        </div>
-        <!-- Copyright -->
-    
-    </footer>
-    <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
+        <div class="col-md-4"></div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer mt-3">
+    <!-- Copyright -->
+    <div class="text-center">© 2019 Copyright:
+      <a> Prudent Grooming</a>
+    </div>
+    <!-- Copyright -->
+
+  </footer>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/jquery-3.4.1.min.js') }}"></script>
   <!-- Bootstrap tooltips -->
   <script type="text/javascript" src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
   <!-- Bootstrap core JavaScript -->
@@ -50,4 +53,5 @@
   <!-- MDB core JavaScript -->
   <!-- <script type="text/javascript" src="{{ url_for('static',filename='js/mdb.min.js') }}"></script> -->
 </body>
+
 </html>

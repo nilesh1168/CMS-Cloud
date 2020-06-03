@@ -109,8 +109,7 @@ navigator.serviceWorker.addEventListener("message", function (event) {
   {
     $.ajax({
       type: "post",
-      url: "/feedback_form",
-      data: "data="+answers+"&session="+document.getElementById("session").textContent,
+      url: Flask.url_for('feedback_form',{ 'data' : answers,'session':document.getElementById("session").textContent }),
       success: function (response) {
         document.write(response);
       }
@@ -131,8 +130,7 @@ navigator.serviceWorker.addEventListener("message", function (event) {
   {
     $.ajax({
       type: "post",
-      url: "/feedback_form",
-      data: "data="+answers+"&session="+document.getElementById("session").textContent,
+      url:  Flask.url_for('feedback_form',{ 'data' : answers,'session':document.getElementById("session").textContent }),
       success: function (response) {
         document.write(response);
       }
@@ -154,8 +152,7 @@ navigator.serviceWorker.addEventListener("message", function (event) {
   {
     $.ajax({
       type: "post",
-      url: "/feedback_form",
-      data: "data="+answers+"&session="+document.getElementById("session").textContent,
+      url:  Flask.url_for('feedback_form',{ 'data' : answers,'session':document.getElementById("session").textContent }),
       success: function (response) {
         document.write(response);
       }
@@ -176,8 +173,7 @@ navigator.serviceWorker.addEventListener("message", function (event) {
   {
     $.ajax({
       type: "post",
-      url: "/feedback_form",
-      data: "data="+answers+"&session="+document.getElementById("session").textContent,
+      url:  Flask.url_for('feedback_form',{ 'data' : answers,'session':document.getElementById("session").textContent }),
       success: function (response) {
         document.write(response);
       }
@@ -198,8 +194,7 @@ navigator.serviceWorker.addEventListener("message", function (event) {
   {
     $.ajax({
       type: "get",
-      url: "/feedback_form",
-      data: "data="+answers+"&session="+document.getElementById("session").textContent,
+      url:  Flask.url_for('feedback_form',{ 'data' : answers,'session':document.getElementById("session").textContent }),
       success: function (response) {
           console.log('SUCCESS');
           document.write(response);

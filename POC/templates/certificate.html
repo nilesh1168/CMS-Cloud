@@ -1,16 +1,15 @@
 <html>
 
 <head>
-
   <link rel="stylesheet" href="{{ url_for('static',filename='css/cert.css') }}">
   <style>
     html{
-      background: #eee url({{ url_for('static',filename='img/certificate/'+cert) }}) no-repeat;
-      display: inline-block;
-      width: 1024px;
-      height: 768px; 
-      background-size: 100%;
-    }
+  background: #eee url({{ url_for('static',filename='img/certificate/'+cert) }}) no-repeat;
+  display: inline-block;
+  width: 1024px;
+  height: 768px; 
+  background-size: 100%;
+}
   </style>
 </head>
 
@@ -18,7 +17,7 @@
   <br><br><br><br>
   <br><br><br><br>
 
-  <p class="smaller" id="cert-declaration">
+  <p class="cert-declaration">
     THIS IS TO CERTIFY THAT
   </p>
 
@@ -26,7 +25,7 @@
     {{ s_name }}
   </h1>
 
-  <p class="smaller" id='cert-completed-line'>
+  <p>
     has successfully completed the
   </p>
 
@@ -49,14 +48,10 @@
 
   <div id="cert-footer">
     <div id="cert-issued-by">
-
       <p>Issued by</p>
-
     </div>
     <div id="cert-ceo-design">
-
       <p>CEO of The Company</p>
-
     </div>
   </div>
 </body>
