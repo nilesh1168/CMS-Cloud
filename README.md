@@ -22,7 +22,7 @@ This project was sponsored by [Prudent Software & Grooming Academy](http://psgap
 >   > - These reports are generated for each workshop conducted based on the feedback provided.
 
 ### Preview
-![Landing Page](preview/landing.png "Landing Page")
-![Session Report](preview/report.png "Session Report")
-![Notify](preview/notify.png "Notify")
-![Questions](preview/questions.png "Questions")
+<img src="preview/landing.png" alt="Landing Page" title="Landing Page"/>
+<img src="preview/report.png" alt="Session Report" title="Session Report"/>
+<img src="preview/notify.png" width="300" height="500" alt="Notify" title="Notify"/>
+<img src="preview/questions.png" width="300" height="500" alt="Questions" title="Questions"/>
