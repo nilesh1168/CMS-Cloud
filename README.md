@@ -13,7 +13,7 @@ This project was sponsored by [Prudent Software & Grooming Academy](http://psgap
 
 ### Working
 > #### Participant
->   > - The participant will scan a **QR code** and then follow a series of **QnA** while attending the workshop. After the QnA section the participant will be prompted to proivde feedback with his/her basic contact details.
+>   > - The participant will scan a **QR code** and then follow a series of **QnA** while attending the workshop. After the QnA section the participant will be prompted to provide feedback with his/her basic contact details.
 >   > - S/he will then submit the feedback and get and **e-certificate** of participation instantly.
 > #### Admin
 >   > - The admin arrange/edit/delete the workshop.
